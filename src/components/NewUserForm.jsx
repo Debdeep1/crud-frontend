@@ -60,7 +60,7 @@ export default function NewCustomerForm() {
   };
 
   return (
-    <div className="mx-auto bg-white p-8 shadow-md rounded-lg">
+    <div className="mx-auto bg-white p-6 border shadow-inner rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
       <h1 className="text-2xl font-bold mb-6">Add New Customer</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

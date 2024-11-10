@@ -31,7 +31,7 @@ const Dashboard = () => {
   }, []);
   return (
     <Layout>
-      <div>
+      <div className="h-[calc(100vh-80px)] bg-white overflow-y-auto rounded-lg shadow-md border p-3">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <NavCards link="/new_user" icon="👤" title="New Users" value="8,267" />
           <NavCards link="/find_users" icon="📦" title="Find Users" value="" />

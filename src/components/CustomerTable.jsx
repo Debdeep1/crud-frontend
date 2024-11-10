@@ -5,7 +5,7 @@ export default function CustomerTable() {
   const customers = useSelector((state) => state.customers.customers);
   console.log("Customers::", customers);
   return (
-    <div className="bg-white p-4 shadow-md rounded-lg">
+    <div className="bg-white p-4 shadow-inner rounded-lg">
       <table className="w-full text-left">
         <thead>
           <tr>

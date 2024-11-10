@@ -6,7 +6,7 @@ export default function NavCards({ link, icon, title, value }) {
   return (
     <Link
       to={link}
-      className="bg-white p-4 shadow-md rounded-lg flex items-center space-x-4"
+      className="bg-white p-4 shadow-inner border rounded-lg flex items-center space-x-4"
     >
       <span className="text-3xl">{icon}</span>
       <div>

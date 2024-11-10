@@ -1,8 +1,7 @@
-
 // components/Navbar.tsx
 export default function Navbar() {
   return (
-    <header className="bg-white shadow-sm w-full p-4 flex justify-between items-center">
+    <header className="bg-inherit shadow-sm w-full p-4 flex justify-end items-center">
       <div>
         <img
           src="/profile-avatar.png"

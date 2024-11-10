@@ -36,7 +36,7 @@ export default function FindUsers() {
   });
 
   return (
-    <div className="mx-auto bg-white p-6 shadow-md rounded-lg">
+    <div className="mx-auto bg-white p-6 shadow-inner border rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
       <h1 className="text-2xl font-bold mb-6">Find Users</h1>
 
       {/* Filter Form */}
