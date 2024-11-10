@@ -16,9 +16,12 @@ export default function Sidebar() {
         <ul>
           {navItems.map((item, index) => (
             <li key={index} className="mb-6">
-              <a href={item.href} className="text-xl text-gray-300 hover:text-white">
+              <Link
+                to={item.href}
+                className="text-xl text-gray-300 hover:text-white"
+              >
                 {item.name}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

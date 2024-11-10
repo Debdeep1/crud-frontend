@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -36,8 +37,7 @@ export default function AuthForm({ type }) {
       });
 
       const data = await response.json();
-
-      console.log("API DATA::", data);
+      
       if (!response.ok) {
         toast.error("Something went wrong");
         throw new Error(data.message || "Something went wrong");
@@ -119,3 +119,6 @@ export default function AuthForm({ type }) {
     </div>
   );
 }
+AuthForm.propTypes = {
+  type: PropTypes.string.isRequired,
+};

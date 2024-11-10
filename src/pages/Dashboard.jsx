@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Layout from "../components/Layout";
-import Card from "../components/Card";
+import NavCards from "../components/NavCards";
 import CustomerTable from "../components/CustomerTable";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addCustomers } from "../redux/slices/customerSlice";
 import { toast } from "react-toastify";
 
@@ -33,8 +33,8 @@ const Dashboard = () => {
     <Layout>
       <div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <Card link="/new_user" icon="👤" title="New Users" value="8,267" />
-          <Card link="/find_users" icon="📦" title="Find Users" value="" />
+          <NavCards link="/new_user" icon="👤" title="New Users" value="8,267" />
+          <NavCards link="/find_users" icon="📦" title="Find Users" value="" />
         </div>
         <CustomerTable />
       </div>
