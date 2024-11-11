@@ -13,7 +13,7 @@ const Billings = () => {
   return (
     <Layout>
       <div className="mx-auto bg-white p-2 shadow-md border rounded-lg h-[calc(100vh-80px)] overflow-y-auto">
-        <div className="mx-auto bg-white p-6 shadow-inner border rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
+        <div className="mx-auto bg-white p-4 shadow-inner border rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
           <Heading title="Billings" isFilter={true} />
 
           {/* Total Amount */}
@@ -23,33 +23,35 @@ const Billings = () => {
 
           {/* Billing Form */}
           <BillingsForm />
-          {/* Billing Data Table */}
-          <table className="w-full bg-white border rounded-lg shadow">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="p-2 border">Customer</th>
-                <th className="p-2 border">Month</th>
-                <th className="p-2 border">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {billingData.length > 0 ? (
-                billingData.map((record, index) => (
-                  <tr key={index} className="border-b">
-                    <td className="p-2 border">{record.customer}</td>
-                    <td className="p-2 border">{record.month}</td>
-                    <td className="p-2 border">${record.amount}</td>
-                  </tr>
-                ))
-              ) : (
+
+          <div className="bg-white p-2 shadow-inner rounded-lg">
+            <table className="table table-zebra">
+              <thead>
                 <tr>
-                  <td colSpan="3" className="p-2 text-center">
-                    No data available
-                  </td>
+                  <th className="p-2 uppercase">Customer</th>
+                  <th className="p-2 uppercase">Month</th>
+                  <th className="p-2 uppercase">Amount</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {billingData.length > 0 ? (
+                  billingData.map((record, index) => (
+                    <tr key={index} className="border-b">
+                      <td className="p-2">{record.customer}</td>
+                      <td className="p-2">{record.month}</td>
+                      <td className="p-2">${record.amount}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3" className="p-2 text-center">
+                      No data available
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </Layout>

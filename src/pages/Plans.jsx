@@ -44,7 +44,7 @@ const Plans = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="planNumber"
               >
-                Zonal Number
+                Plan Number
               </label>
               <input
                 type="text"
@@ -62,7 +62,7 @@ const Plans = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="price"
               >
-                Zonal Landmark
+                Price
               </label>
               <input
                 type="text"
