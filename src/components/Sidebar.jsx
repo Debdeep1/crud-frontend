@@ -9,6 +9,7 @@ export default function Sidebar() {
     () => [
       { name: "All Users", href: "/" },
       { name: "New User", href: "/new_user" },
+      { name: "Billings", href: "/billings" },
       { name: "Find Users", href: "/find_users" },
     ],
     []

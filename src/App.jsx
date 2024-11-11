@@ -7,6 +7,8 @@ import NewUser from "./pages/NewUser";
 import FindUser from "./pages/FindUser";
 import CustomerPage from "./pages/CustomerPage";
 import Zone from "./pages/Zone";
+import Plans from "./pages/Plans";
+import Billings from "./pages/Billings";
 
 function App() {
   return (
@@ -22,7 +24,7 @@ function App() {
             </SessionAuth>
           }
         />
-          <Route
+        <Route
           path="/customers"
           element={
             <SessionAuth>
@@ -30,7 +32,7 @@ function App() {
             </SessionAuth>
           }
         />
-          <Route
+        <Route
           path="/customers/:id"
           element={
             <SessionAuth>
@@ -38,7 +40,7 @@ function App() {
             </SessionAuth>
           }
         />
-          <Route
+        <Route
           path="/new_user"
           element={
             <SessionAuth>
@@ -46,7 +48,15 @@ function App() {
             </SessionAuth>
           }
         />
-          <Route
+           <Route
+          path="/billings"
+          element={
+            <SessionAuth>
+              <Billings />
+            </SessionAuth>
+          }
+        />
+        <Route
           path="/find_users"
           element={
             <SessionAuth>
@@ -54,11 +64,19 @@ function App() {
             </SessionAuth>
           }
         />
-           <Route
+        <Route
           path="/new_zone"
           element={
             <SessionAuth>
               <Zone />
+            </SessionAuth>
+          }
+        />
+        <Route
+          path="/new_plan"
+          element={
+            <SessionAuth>
+              <Plans />
             </SessionAuth>
           }
         />
