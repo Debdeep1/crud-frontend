@@ -8,9 +8,9 @@ export default function NavCards({ link, icon, title, value }) {
       to={link}
       className="bg-white p-4 shadow-inner border rounded-lg flex items-center space-x-4"
     >
-      <span className="text-3xl">{icon}</span>
+      <span className="text-2xl text-sky-600">{icon}</span>
       <div>
-        <h2 className="text-lg font-bold ">{title}</h2>
+        <h2 className="text-lg font-semibold text-gray-700 ">{title}</h2>
         <p className="text-sm text-gray-500">{value}</p>
       </div>
     </Link>

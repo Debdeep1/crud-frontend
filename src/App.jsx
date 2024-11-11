@@ -5,6 +5,8 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import NewUser from "./pages/NewUser";
 import FindUser from "./pages/FindUser";
+import CustomerPage from "./pages/CustomerPage";
+import Zone from "./pages/Zone";
 
 function App() {
   return (
@@ -21,6 +23,22 @@ function App() {
           }
         />
           <Route
+          path="/customers"
+          element={
+            <SessionAuth>
+              <Dashboard />
+            </SessionAuth>
+          }
+        />
+          <Route
+          path="/customers/:id"
+          element={
+            <SessionAuth>
+              <CustomerPage />
+            </SessionAuth>
+          }
+        />
+          <Route
           path="/new_user"
           element={
             <SessionAuth>
@@ -33,6 +51,14 @@ function App() {
           element={
             <SessionAuth>
               <FindUser />
+            </SessionAuth>
+          }
+        />
+           <Route
+          path="/new_zone"
+          element={
+            <SessionAuth>
+              <Zone />
             </SessionAuth>
           }
         />

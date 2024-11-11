@@ -10,19 +10,13 @@ const customerSlice = createSlice({
   initialState,
   reducers: {
     addCustomers: (state, action) => {
-      const newCustomers = action.payload;
-      newCustomers.forEach((newCustomer) => {
-        const customerExists = state.customers.some(
-          (customer) => customer.id === newCustomer.id
-        );
-
-        if (!customerExists) {
-          state.customers.push(newCustomer);
-        }
-      });
+      state.customers = action.payload;
+    },
+    setCustomer: (state, action) => {
+      state.customer = action.payload;
     },
   },
 });
 
-export const { addCustomers } = customerSlice.actions;
+export const { addCustomers, setCustomer } = customerSlice.actions;
 export default customerSlice.reducer;
