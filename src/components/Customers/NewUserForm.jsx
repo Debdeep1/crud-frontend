@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Heading from "./Heading";
+import Heading from "../common/Heading";
+
 
 export default function NewCustomerForm() {
   const [formData, setFormData] = useState({
@@ -60,7 +61,7 @@ export default function NewCustomerForm() {
   };
 
   return (
-    <div className="mx-auto bg-white p-6 border shadow-inner rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
+    <div className="mx-auto bg-white p-4 border shadow-inner rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
       <Heading title="Add New Customer" />
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

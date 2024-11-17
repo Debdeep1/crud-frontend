@@ -1,12 +1,14 @@
 import { useEffect, useMemo } from "react";
-import Layout from "../components/Layout";
+
 import NavCards from "../components/NavCards";
-import CustomerTable from "../components/CustomerTable";
+
 import { useDispatch, useSelector } from "react-redux";
 import { addCustomers } from "../redux/slices/customerSlice";
 import { toast } from "react-toastify";
 import { FaDollarSign, FaMapMarkedAlt, FaUsers } from "react-icons/fa";
 import { RiUserSearchFill } from "react-icons/ri";
+import Layout from "../components/Layout";
+import CustomerTable from "../components/Customers/CustomerTable";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -27,13 +29,13 @@ const Dashboard = () => {
         value: "",
       },
       {
-        link: "/new_zone",
+        link: "/zones",
         icon: <FaMapMarkedAlt color="#FF9D3D" />,
         title: "Zone",
         value: "",
       },
       {
-        link: "/new_plan",
+        link: "/plans",
         icon: <FaDollarSign color="#88C273" />,
         title: "Plan",
         value: "",

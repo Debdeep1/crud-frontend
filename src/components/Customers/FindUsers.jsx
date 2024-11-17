@@ -1,7 +1,9 @@
 // components/FindUsers.tsx
 "use client";
 import { useState } from "react";
-import Heading from "./Heading";
+import Heading from "../common/Heading";
+
+
 
 export default function FindUsers() {
   const [filters, setFilters] = useState({
@@ -71,7 +73,7 @@ export default function FindUsers() {
   });
 
   return (
-    <div className="mx-auto bg-white p-6 shadow-inner border rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
+    <div className="mx-auto bg-white p-4 shadow-inner border rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
       <Heading title="Find Customers" />
 
       {/* Filter Form */}

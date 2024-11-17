@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setCustomer } from "../redux/slices/customerSlice";
+
 import { toast } from "react-toastify";
 import { IoOpen } from "react-icons/io5";
+import { setCustomer } from "../../redux/slices/customerSlice";
 
 export default function CustomerTable() {
   // Fetch customer data from the API

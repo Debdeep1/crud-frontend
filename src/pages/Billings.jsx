@@ -1,5 +1,4 @@
-import { FaPlus } from "react-icons/fa";
-import Heading from "../components/Heading";
+import Heading from "../components/common/Heading";
 import Layout from "../components/Layout";
 import BillingsForm from "../components/Billings/BillingsForm";
 

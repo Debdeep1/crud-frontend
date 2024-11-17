@@ -9,6 +9,7 @@ import CustomerPage from "./pages/CustomerPage";
 import Zone from "./pages/Zone";
 import Plans from "./pages/Plans";
 import Billings from "./pages/Billings";
+import Zoneform from "./components/Zones/Zoneform";
 
 function App() {
   return (
@@ -64,11 +65,19 @@ function App() {
             </SessionAuth>
           }
         />
+         <Route
+          path="/zones"
+          element={
+            <SessionAuth>
+              <Zone />
+            </SessionAuth>
+          }
+        />
         <Route
           path="/new_zone"
           element={
             <SessionAuth>
-              <Zone />
+              <Zoneform />
             </SessionAuth>
           }
         />

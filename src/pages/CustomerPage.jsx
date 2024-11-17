@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import Layout from "../components/Layout";
 import { useState } from "react";
-import Heading from "../components/Heading";
+import Heading from "../components/common/Heading";
 
 const CustomerPage = () => {
   const customer = useSelector((state) => state.customers.customer);

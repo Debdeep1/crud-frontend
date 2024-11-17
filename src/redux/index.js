@@ -2,8 +2,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-
 import customerReducer from "./slices/customerSlice";
+import zoneReducer from "./slices/zoneSlice";
+
 const persistConfig = {
   key: "root",
   storage,
@@ -11,6 +12,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
   customers: customerReducer,
+  zones: zoneReducer,
 });
 const persistedReducer = persistReducer(persistConfig, reducer);
 

@@ -1,6 +1,6 @@
-import React from 'react'
 import Layout from '../components/Layout'
-import FindUsers from '../components/FindUsers'
+import FindUsers from '../components/Customers/FindUsers'
+
 
 const FindUser = () => {
   return (
