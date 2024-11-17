@@ -2,20 +2,28 @@ import { useEffect, useState } from "react";
 import Heading from "../components/common/Heading";
 import Layout from "../components/Layout";
 import { useDispatch, useSelector } from "react-redux";
-import { addZones } from "../redux/slices/zoneSlice";
+import { addZones, setZone } from "../redux/slices/zoneSlice";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Modal from "../components/common/Modal";
+import { toast } from "react-toastify";
 
 const Zone = () => {
   const [modal, setModal] = useState(false);
   const zones = useSelector((state) => state.zones.zones);
+  const zone = useSelector((state) => state.zones.zone);
+
   const dispatch = useDispatch();
 
   const openModal = () => {
     setModal(true);
   };
+
+  const handleSetZone = (zone) => {
+    dispatch(setZone(zone));
+  };
+
   const fetchZones = async () => {
     try {
       const response = await fetch(
@@ -30,15 +38,40 @@ const Zone = () => {
       );
       const data = await response.json();
       dispatch(addZones(data));
-      console.log(data);
     } catch (error) {
       console.error("Error fetching zones:", error);
+    }
+  };
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/zones/delete/${zone._id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        toast.error("Something went wrong");
+        throw new Error(data.message || "Something went wrong");
+      } else {
+        toast.success("Zone deleted successfully!");
+        fetchZones();
+      }
+      setModal(false);
+    } catch (error) {
+      console.error("Error deleting zone:", error);
     }
   };
   useEffect(() => {
     fetchZones();
   }, []);
 
+  console.log("Zone", zone);
   return (
     <Layout>
       <div className="bg-white p-2 shadow-md rounded-lg h-[calc(100vh-80px)] border">
@@ -60,7 +93,7 @@ const Zone = () => {
                   <td className="p-2">{zone.zonalNumber}</td>
                   <td className="p-2">{zone.zonalLandmark}</td>
                   <td className="p-2">
-                    <div className="dropdown">
+                    <div className="dropdown" onClick={handleSetZone(zone)}>
                       <div tabIndex={0} role="button" className="btn m-1">
                         <HiOutlineDotsVertical className="text-gray-500 cursor-pointer" />
                       </div>
@@ -96,6 +129,7 @@ const Zone = () => {
           title="Delete"
           desp={"Sure you want to delete this zone?"}
           isDelete={true}
+          onClick={handleDelete}
         />
       )}
     </Layout>

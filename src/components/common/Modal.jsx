@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { IoIosClose } from "react-icons/io";
 
-const Modal = ({ isOpen, onClose, title, desp, isDelete = false }) => {
+const Modal = ({ isOpen, onClose, title, desp, isDelete = false, onClick }) => {
   if (!isOpen) return null;
 
   return (
@@ -37,6 +37,7 @@ const Modal = ({ isOpen, onClose, title, desp, isDelete = false }) => {
               No, Cancel
             </button>
             <button
+              onClick={onClick}
               className={`btn ${
                 isDelete ? "btn-error text-white" : "btn-primary"
               } `}
@@ -56,6 +57,7 @@ Modal.propTypes = {
   title: PropTypes.string.isRequired,
   desp: PropTypes.string.isRequired,
   isDelete: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default Modal;
