@@ -10,6 +10,7 @@ import Zone from "./pages/Zone";
 import Plans from "./pages/Plans";
 import Billings from "./pages/Billings";
 import Zoneform from "./components/Zones/Zoneform";
+import Planform from "./components/Plans/Planform";
 
 function App() {
   return (
@@ -73,6 +74,14 @@ function App() {
             </SessionAuth>
           }
         />
+             <Route
+          path="/zones/:id"
+          element={
+            <SessionAuth>
+              <Zoneform />
+            </SessionAuth>
+          }
+        />
         <Route
           path="/new_zone"
           element={
@@ -82,10 +91,26 @@ function App() {
           }
         />
         <Route
-          path="/new_plan"
+          path="/plans"
           element={
             <SessionAuth>
               <Plans />
+            </SessionAuth>
+          }
+        />
+            <Route
+          path="/plans/:id"
+          element={
+            <SessionAuth>
+              <Planform />
+            </SessionAuth>
+          }
+        />
+          <Route
+          path="/new_plan"
+          element={
+            <SessionAuth>
+              <Planform />
             </SessionAuth>
           }
         />

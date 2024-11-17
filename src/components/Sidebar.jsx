@@ -1,16 +1,18 @@
 // components/Sidebar.tsx
 
 import { useMemo } from "react";
+import { CiMoneyCheck1 } from "react-icons/ci";
+import { GoHome } from "react-icons/go";
+import { TbUserSearch } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 
 export default function Sidebar() {
   const location = useLocation();
   const navItems = useMemo(
     () => [
-      { name: "All Users", href: "/" },
-      { name: "New User", href: "/new_user" },
-      { name: "Billings", href: "/billings" },
-      { name: "Find Users", href: "/find_users" },
+      { name: "Home", href: "/", icon: <GoHome /> },
+      { name: "Billings", href: "/billings", icon: <CiMoneyCheck1 /> },
+      { name: "Find Customers", href: "/find_users", icon: <TbUserSearch /> },
     ],
     []
   );
@@ -33,7 +35,10 @@ export default function Sidebar() {
                     : "bg-slate-700 shadow-neumorphic-inset hover:bg-slate-600"
                 } rounded-xl flex items-center`}
               >
-                <span className="text-xl w-full">{item.name}</span>
+                <div className="text-xl w-full flex items-center gap-2">
+                  <span>{item.icon}</span>
+                  <span>{item.name}</span>
+                </div>
               </Link>
             </li>
           ))}

@@ -305,14 +305,14 @@ const CustomerPage = () => {
                   <button
                     type="button"
                     onClick={handleSetEditing}
-                    className="bg-blue-500 text-white mr-3 px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="btn btn-outline btn-error mr-3"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     // onClick={handleSetEditing}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="btn btn-primary"
                   >
                     Save
                   </button>
@@ -321,7 +321,7 @@ const CustomerPage = () => {
                 <button
                   type="button"
                   onClick={handleSetEditing}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="btn btn-primary"
                 >
                   Edit
                 </button>

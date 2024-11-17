@@ -3,13 +3,16 @@ import Layout from "../Layout";
 import Heading from "../common/Heading";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
-const Zoneform = () => {
-  const zone = useSelector((state) => state.zones.zone);
+const Planform = () => {
+  const location = useLocation();
+
+  const plan = useSelector((state) => state.plans.plan);
   const [formData, setFormData] = useState({
-    name: zone.name || "",
-    zonalNumber: zone.zonalNumber || "",
-    zonalLandmark: zone.zonalLandmark || "",
+    name: plan.name || "",
+    planNumber: plan.planNumber || "",
+    price: plan.price || "",
   });
 
   const handleChange = (e) => {
@@ -18,12 +21,12 @@ const Zoneform = () => {
       [e.target.name]: e.target.value,
     });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiUrl = location.pathname.includes(zone._id)
-      ? `${import.meta.env.VITE_REACT_APP_API_URL}/zones/update/${zone._id}`
-      : `${import.meta.env.VITE_REACT_APP_API_URL}/zones/add`;
+    console.log(formData);
+    const apiUrl = location.pathname.includes(plan._id)
+      ? `${import.meta.env.VITE_REACT_APP_API_URL}/plans/update/${plan._id}`
+      : `${import.meta.env.VITE_REACT_APP_API_URL}/plans/add`;
     try {
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -38,14 +41,14 @@ const Zoneform = () => {
         toast.error("Something went wrong");
         throw new Error(data.message || "Something went wrong");
       } else {
-        if (location.pathname.includes(zone._id)) {
-          toast.success("Zone updated!");
+        if (location.pathname.includes(plan._id)) {
+          toast.success("Plan updated successfully!");
         } else {
-          toast.success("Zone created!");
+          toast.success("Plan created successfully!");
           setFormData({
             name: "",
-            zonalNumber: "",
-            zonalLandmark: "",
+            planNumber: "",
+            price: "",
           });
         }
       }
@@ -57,7 +60,7 @@ const Zoneform = () => {
     <Layout>
       <div className="bg-white p-2 shadow-md rounded-lg h-[calc(100vh-80px)] border">
         <div className="bg-white p-4 shadow-inner rounded-lg h-[calc(100vh-100px)] border">
-          <Heading title="Create Zone" />
+          <Heading title="Create Plan" />
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label
@@ -73,42 +76,43 @@ const Zoneform = () => {
                 value={formData.name}
                 onChange={handleChange}
                 className="input input-bordered w-full"
-                placeholder="Enter name of the zone"
+                placeholder="Enter name of the plan eg:Silver, Gold"
                 required
               />
             </div>
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="zonalNumber"
+                htmlFor="planNumber"
               >
-                Zonal Number
+                Plan Number
               </label>
               <input
                 type="text"
-                id="zonalNumber"
-                name="zonalNumber"
-                value={formData.zonalNumber}
+                id="planNumber"
+                name="planNumber"
+                value={formData.planNumber}
                 onChange={handleChange}
                 className="input input-bordered w-full"
-                placeholder="Enter zonal number"
+                placeholder="Enter plan number"
               />
             </div>
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="zonalLandmark"
+                htmlFor="price"
               >
-                Zonal Landmark
+                Price
               </label>
               <input
                 type="text"
-                id="zonalLandmark"
-                name="zonalLandmark"
-                value={formData.zonalLandmark}
+                id="price"
+                name="price"
+                value={formData.price}
                 onChange={handleChange}
                 className="input input-bordered w-full"
-                placeholder="Enter landmark "
+                placeholder="Enter price"
+                required
               />
             </div>
 
@@ -124,4 +128,4 @@ const Zoneform = () => {
   );
 };
 
-export default Zoneform;
+export default Planform;
