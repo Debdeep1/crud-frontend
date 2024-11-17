@@ -8,7 +8,6 @@ import { setCustomer } from "../../redux/slices/customerSlice";
 export default function CustomerTable() {
   // Fetch customer data from the API
   const customers = useSelector((state) => state.customers.customers);
-  console.log("Customers::", customers);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

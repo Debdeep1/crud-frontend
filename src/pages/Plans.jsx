@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "../components/common/Modal";
 import { addPlans, setPlan } from "../redux/slices/planSlice";
 import { toast } from "react-toastify";
+import { fetchPlans } from "../apis/Plans";
 
 const Plans = () => {
   const [modal, setModal] = useState(false);
@@ -23,20 +24,11 @@ const Plans = () => {
   const openModal = () => {
     setModal(true);
   };
-  const fetchPlans = async () => {
+
+  const getPlans = async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/plans/all`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
-      const data = await response.json();
-      dispatch(addPlans(data));
+      const response = await fetchPlans();
+      dispatch(addPlans(response));
     } catch (error) {
       console.error("Error fetching zones:", error);
     }
@@ -59,7 +51,7 @@ const Plans = () => {
         throw new Error(data.message || "Something went wrong");
       } else {
         toast.success("Plan deleted successfully!");
-        fetchPlans();
+        getPlans();
       }
       setModal(false);
     } catch (error) {
@@ -68,7 +60,7 @@ const Plans = () => {
   };
 
   useEffect(() => {
-    fetchPlans();
+    getPlans();
   }, []);
 
   return (

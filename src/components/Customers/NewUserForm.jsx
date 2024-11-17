@@ -1,11 +1,29 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Heading from "../common/Heading";
-
+import { useDispatch, useSelector } from "react-redux";
+import { fetchZones } from "../../apis/Zones";
+import { fetchPlans } from "../../apis/Plans";
+import { addZones } from "../../redux/slices/zoneSlice";
+import { addPlans } from "../../redux/slices/planSlice";
 
 export default function NewCustomerForm() {
+  const dispatch = useDispatch();
+  const getZonesAndPlans = async () => {
+    try {
+      const zonesResponse = await fetchZones();
+      const plansResponse = await fetchPlans();
+      dispatch(addZones(zonesResponse));
+      dispatch(addPlans(plansResponse));
+    } catch (error) {
+      console.error("Error fetching zones and plans:", error);
+    }
+  };
+  const zones = useSelector((state) => state.zones.zones);
+  const plans = useSelector((state) => state.plans.plans);
+  
   const [formData, setFormData] = useState({
     setupBoxNo: "",
     firstName: "",
@@ -24,10 +42,20 @@ export default function NewCustomerForm() {
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    if (name === "servicePlan") {
+      const selectedPlan = plans.find((plan) => plan.name === value);
+      setFormData({
+        ...formData,
+        [name]: value,
+        amt: selectedPlan ? selectedPlan.price : "",
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const navigate = useNavigate();
@@ -60,6 +88,9 @@ export default function NewCustomerForm() {
     }
   };
 
+  useEffect(() => {
+    getZonesAndPlans();
+  }, []);
   return (
     <div className="mx-auto bg-white p-4 border shadow-inner rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
       <Heading title="Add New Customer" />
@@ -264,16 +295,21 @@ export default function NewCustomerForm() {
             >
               Zone
             </label>
-            <input
-              type="text"
+            <select
               id="zone"
               name="zone"
               value={formData.zone}
               onChange={handleChange}
-              className="input input-bordered w-full"
-              placeholder="Enter Zone"
+              className="select select-bordered w-full"
               required
-            />
+            >
+              <option value="">Select a Zone</option>
+              {zones.map((zone) => (
+                <option key={zone._id} value={zone.name}>
+                  {zone.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -284,16 +320,21 @@ export default function NewCustomerForm() {
             >
               Service Plan
             </label>
-            <input
-              type="text"
+            <select
               id="servicePlan"
               name="servicePlan"
               value={formData.servicePlan}
               onChange={handleChange}
-              className="input input-bordered w-full"
-              placeholder="Enter Service Plan"
+              className="select select-bordered w-full"
               required
-            />
+            >
+              <option value="">Select a Service Plan</option>
+              {plans.map((plan) => (
+                <option key={plan._id} value={plan.name}>
+                  {plan.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="mb-4">
@@ -312,6 +353,7 @@ export default function NewCustomerForm() {
               className="input input-bordered w-full"
               placeholder="Enter Amount"
               required
+              disabled
             />
           </div>
         </div>
