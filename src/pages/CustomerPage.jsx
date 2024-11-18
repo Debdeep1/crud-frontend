@@ -1,21 +1,73 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Layout from "../components/Layout";
 import { useState } from "react";
 import Heading from "../components/common/Heading";
+import { toast } from "react-toastify";
+import { setCustomer } from "../redux/slices/customerSlice";
+import NewCustomerForm from "../components/Customers/NewUserForm";
 
 const CustomerPage = () => {
   const customer = useSelector((state) => state.customers.customer);
   const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    setupBoxNo: customer.setupBoxNo || "",
+    firstName: customer.firstName || "",
+    lastName: customer.lastName || "",
+    email: customer.email || "",
+    mobileNo: customer.mobileNo || "",
+    companyName: customer.companyName || "",
+    address: customer.address || "",
+    landmark: customer.landmark || "",
+    city: customer.city || "",
+    pincode: customer.pincode || "",
+    zone: customer.zone || "",
+    servicePlan: customer.servicePlan || "",
+    amt: customer.amt || "",
+    remarks: customer.remarks || "",
+  });
 
+  const dispatch = useDispatch();
   const handleSetEditing = () => {
     setIsEditing(!isEditing);
   };
+
+  const handleSaveCustomer = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/customers/update/${
+          customer._id
+        }`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(customer),
+        }
+      );
+      const data = await response.json();
+      console.log("data", data);
+      if (!response.ok) {
+        toast.error("Something went wrong");
+        throw new Error(data.message || "Something went wrong");
+      }
+      toast.success("Customer updated successfully!");
+      setIsEditing(false);
+      dispatch(setCustomer(data));
+    } catch (error) {
+      console.error("Error saving customer:", error);
+    }
+  };
+  
   return (
     <Layout>
       <div className="h-[calc(100vh-80px)] bg-white overflow-y-auto rounded-lg shadow-md border p-2">
         <div className="h-[calc(100vh-100px)] bg-white overflow-y-auto rounded-lg shadow-inner border p-6">
           <Heading title="Customer Details" />
-          <form>
+          <NewCustomerForm isNew={false} isEditing={isEditing} setIsEditing={setIsEditing}/>
+          {/* <form onSubmit={handleSaveCustomer}>
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -311,7 +363,6 @@ const CustomerPage = () => {
                   </button>
                   <button
                     type="submit"
-                    // onClick={handleSetEditing}
                     className="btn btn-primary"
                   >
                     Save
@@ -327,7 +378,7 @@ const CustomerPage = () => {
                 </button>
               )}
             </div>
-          </form>
+          </form> */}
         </div>
       </div>
     </Layout>
