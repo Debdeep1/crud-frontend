@@ -81,14 +81,14 @@ const Zone = () => {
               {zones.map((zone) => (
                 <tr key={zone._id}>
                   <td className="p-2">{zone.name}</td>
-                  <td className="p-2">{zone.zonalNumber}</td>
-                  <td className="p-2">{zone.zonalLandmark}</td>
+                  <td className="p-2">{zone.zonalNumber ? zone.zonalNumber : "-"}</td>
+                  <td className="p-2">{zone.zonalLandmark ? zone.zonalLandmark : "-"}</td>
                   <td className="p-2">
                     <div
                       className="dropdown"
                       onClick={() => handleSetZone(zone)}
                     >
-                      <div tabIndex={0} role="button" className="btn b m-1">
+                      <div tabIndex={0} role="button" className="btn btn-sm m-1">
                         <HiOutlineDotsVertical className="text-gray-500 cursor-pointer" />
                       </div>
                       <ul

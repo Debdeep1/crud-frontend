@@ -19,7 +19,7 @@ export default function NavCards({ link, icon, title, value }) {
 
 NavCards.propTypes = {
   link: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.object,
   title: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
 };

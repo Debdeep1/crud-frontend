@@ -21,7 +21,7 @@ export default function Sidebar() {
   );
   return (
     <div className="w-64 bg-slate-700 text-white px-4 py-3 h-screen z-20 shadow-inner">
-      <h2 className="text-3xl font-bold mb-8 text-center">Tools</h2>
+      <h2 className="text-3xl font-bold mb-8 text-center">CMS</h2>
       <nav>
         <ul>
           {navItems.map((item, index) => (

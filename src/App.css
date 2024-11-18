@@ -12,3 +12,7 @@
 .btn-outline.btn-error:hover {
   color: white !important;
 }
+
+.btn-outline.btn-primary, .btn-primary {
+  color: white !important;
+}

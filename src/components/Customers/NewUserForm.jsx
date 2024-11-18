@@ -23,7 +23,7 @@ export default function NewCustomerForm() {
   };
   const zones = useSelector((state) => state.zones.zones);
   const plans = useSelector((state) => state.plans.plans);
-  
+
   const [formData, setFormData] = useState({
     setupBoxNo: "",
     firstName: "",
@@ -54,7 +54,7 @@ export default function NewCustomerForm() {
       setFormData({
         ...formData,
         [name]: value,
-      });
+      }); 
     }
   };
 
