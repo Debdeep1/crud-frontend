@@ -8,7 +8,6 @@ import { fetchPlans } from "../../apis/Plans";
 import { addZones } from "../../redux/slices/zoneSlice";
 import { addPlans } from "../../redux/slices/planSlice";
 import PropTypes from "prop-types";
-import Modal from "../common/Modal";
 
 export default function NewCustomerForm({
   isNew = true,

@@ -10,7 +10,7 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import Modal from "../common/Modal";
 import PropTypes from "prop-types";
 
-export default function CustomerTable({ fetchCustomers }) {
+export default function CustomerTable({ getCustomers }) {
   // Fetch customer data from the API
   const customers = useSelector((state) => state.customers.customers);
   const customer = useSelector((state) => state.customers.customer);
@@ -68,7 +68,7 @@ export default function CustomerTable({ fetchCustomers }) {
       } else {
         toast.success("Customer deleted successfully!");
         navigate("/");
-        fetchCustomers();
+        getCustomers();
       }
       setModal(false);
     } catch (error) {
@@ -83,7 +83,7 @@ export default function CustomerTable({ fetchCustomers }) {
             <th className="p-2">NAME</th>
             <th className="p-2">SETUPBOX ID</th>
             <th className="p-2">PHONE NUMBER</th>
-            <th className="p-2">ACTIVE</th>
+            {/* <th className="p-2">ACTIVE</th> */}
             <th className="p-2">ZONE</th>
             <th className="p-2">AMOUNT</th>
             <th className="p-2 uppercase">Actions</th>
@@ -100,7 +100,7 @@ export default function CustomerTable({ fetchCustomers }) {
                 </td>
                 <td className="p-2">{customer.setupBoxNo}</td>
                 <td className="p-2">{customer.mobileNo}</td>
-                <td className="p-2">
+                {/* <td className="p-2">
                   <span
                     className={`badge badge-outline ${
                       customer.isActive ? "badge-success" : "badge-error"
@@ -108,7 +108,7 @@ export default function CustomerTable({ fetchCustomers }) {
                   >
                     {customer.isActive ? "Active" : "Inactive"}
                   </span>
-                </td>
+                </td> */}
                 <td className="p-2">{customer.zone}</td>
                 <td className="p-2">{customer.amt}</td>
 
@@ -165,5 +165,5 @@ export default function CustomerTable({ fetchCustomers }) {
 }
 
 CustomerTable.propTypes = {
-  fetchCustomers: PropTypes.func.isRequired,
+  getCustomers: PropTypes.func.isRequired,
 }

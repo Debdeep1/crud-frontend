@@ -78,43 +78,55 @@ const Zone = () => {
               </tr>
             </thead>
             <tbody>
-              {zones.map((zone) => (
-                <tr key={zone._id}>
-                  <td className="p-2">{zone.name}</td>
-                  <td className="p-2">{zone.zonalNumber ? zone.zonalNumber : "-"}</td>
-                  <td className="p-2">{zone.zonalLandmark ? zone.zonalLandmark : "-"}</td>
-                  <td className="p-2">
-                    <div
-                      className="dropdown"
-                      onClick={() => handleSetZone(zone)}
-                    >
-                      <div tabIndex={0} role="button" className="btn btn-sm m-1">
-                        <HiOutlineDotsVertical className="text-gray-500 cursor-pointer" />
-                      </div>
-                      <ul
-                        tabIndex={0}
-                        className="dropdown-content menu bg-base-100 rounded-box z-[1] w-44 p-2 shadow"
+              {zones &&
+                zones.map((zone) => (
+                  <tr key={zone._id}>
+                    <td className="p-2">{zone.name}</td>
+                    <td className="p-2">
+                      {zone.zonalNumber ? zone.zonalNumber : "-"}
+                    </td>
+                    <td className="p-2">
+                      {zone.zonalLandmark ? zone.zonalLandmark : "-"}
+                    </td>
+                    <td className="p-2">
+                      <div
+                        className="dropdown"
+                        onClick={() => handleSetZone(zone)}
                       >
-                        <li
-                          className="mb-1 hover:text-sky-700"
-                          onClick={() => navigate(`/zones/${zone._id}`)}
+                        <div
+                          tabIndex={0}
+                          role="button"
+                          className="btn btn-sm m-1"
                         >
-                          <Link>
-                            {" "}
-                            <FaEdit /> Edit
-                          </Link>
-                        </li>
-                        <li className="hover:text-rose-600" onClick={openModal}>
-                          <Link>
-                            {" "}
-                            <FaTrash /> Delete
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                          <HiOutlineDotsVertical className="text-gray-500 cursor-pointer" />
+                        </div>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content menu bg-base-100 rounded-box z-[1] w-44 p-2 shadow"
+                        >
+                          <li
+                            className="mb-1 hover:text-sky-700"
+                            onClick={() => navigate(`/zones/${zone._id}`)}
+                          >
+                            <Link>
+                              {" "}
+                              <FaEdit /> Edit
+                            </Link>
+                          </li>
+                          <li
+                            className="hover:text-rose-600"
+                            onClick={openModal}
+                          >
+                            <Link>
+                              {" "}
+                              <FaTrash /> Delete
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

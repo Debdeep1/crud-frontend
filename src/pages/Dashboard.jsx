@@ -9,6 +9,7 @@ import { FaDollarSign, FaMapMarkedAlt, FaUsers } from "react-icons/fa";
 import { RiUserSearchFill } from "react-icons/ri";
 import Layout from "../components/Layout";
 import CustomerTable from "../components/Customers/CustomerTable";
+import { fetchCustomers } from "../apis/Customer";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -41,24 +42,17 @@ const Dashboard = () => {
     },
   ];
 
-  const fetchCustomers = useCallback(async () => {
+  const getCustomers = useCallback(async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/customers/all`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        dispatch(addCustomers(data));
-      } else {
-        toast.error("Failed to fetch customers");
-      }
+      const response = await fetchCustomers();
+      dispatch(addCustomers(response));
     } catch (error) {
-      console.error("Failed to fetch customers:", error);
+      console.error("Error fetching customers:", error);
     }
   }, [dispatch]);
 
   useEffect(() => {
-    fetchCustomers();
+    getCustomers();
   }, []);
   return (
     <Layout>
@@ -74,7 +68,7 @@ const Dashboard = () => {
             />
           ))}
         </div>
-        <CustomerTable fetchCustomers={fetchCustomers} />
+        <CustomerTable getCustomers={getCustomers} />
       </div>
     </Layout>
   );

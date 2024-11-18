@@ -1,9 +1,11 @@
-// components/FindUsers.tsx
-"use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { addCustomers } from "../../redux/slices/customerSlice";
 import Heading from "../common/Heading";
-
-
+import { fetchZones } from "../../apis/Zones";
+import { addZones } from "../../redux/slices/zoneSlice";
+import { fetchCustomers } from "../../apis/Customer";
 
 export default function FindUsers() {
   const [filters, setFilters] = useState({
@@ -11,66 +13,83 @@ export default function FindUsers() {
     setupBoxNo: "",
     status: "",
     zone: "",
+    mobileNo: "",
   });
 
-  const users = [
-    {
-      name: "John Doe",
-      email: "john@example.com",
-      title: "Software Engineer",
-      status: "Active",
-      role: "Owner",
-    },
-    {
-      name: "Oscar Rhys",
-      email: "oscar@example.com",
-      title: "Web Developer",
-      status: "Inactive",
-      role: "Member",
-    },
-    {
-      name: "George Reece",
-      email: "george@example.com",
-      title: "Software Engineer",
-      status: "Active",
-      role: "Owner",
-    },
-    {
-      name: "Thomas Joe",
-      email: "thomas@example.com",
-      title: "Project Manager",
-      status: "Active",
-      role: "Member",
-    },
-    {
-      name: "Charlie Kyle",
-      email: "charlie@example.com",
-      title: "Designer",
-      status: "Inactive",
-      role: "Member",
-    },
-    // Add more users as needed
-  ];
+  const customers = useSelector((state) => state.customers.customers);
+  const zones = useSelector((state) => state.zones.zones);
+  const [filteredCustomerSearch, setFilteredCustomerSearch] = useState([]);
+
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
-    setFilters({
-      ...filters,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value });
+
+    // Perform client-side filtering for name search
+    if (name === "name" && value.trim() !== "") {
+      const results = customers && customers.filter((customer) =>
+        `${customer.firstName} ${customer.lastName}`
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      );
+      setFilteredCustomerSearch(results);
+    } else {
+      setFilteredCustomerSearch([]);
+    }
   };
 
-  const filteredUsers = users.filter((user) => {
-    return (
-      (!filters.name ||
-        user.name.toLowerCase().includes(filters.name.toLowerCase())) &&
-      (!filters.role ||
-        user.role.toLowerCase().includes(filters.role.toLowerCase())) &&
-      (!filters.status ||
-        user.status.toLowerCase() === filters.status.toLowerCase()) &&
-      (!filters.title ||
-        user.title.toLowerCase().includes(filters.title.toLowerCase()))
-    );
-  });
+  const getZones = async () => {
+    try {
+      const response = await fetchZones();
+      dispatch(addZones(response));
+    } catch (error) {
+      console.error("Error fetching zones:", error);
+    }
+  };
+
+  const getCustomers = async () => {
+    try {
+      const response = await fetchCustomers();
+      dispatch(addCustomers(response));
+    } catch (error) {
+      console.error("Error fetching customers:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (zones.length == 0) getZones();
+    if (customers.length == 0) getCustomers();
+  }, []);
+
+  // Function to fetch filtered customers from the backend
+  const fetchFilteredCustomers = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/customers/filterCustomers`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filters),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(addCustomers(data));
+      } else {
+        toast.error("Failed to fetch filtered customers");
+      }
+    } catch (error) {
+      console.error("Error fetching filtered customers:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFilteredCustomers();
+  }, [filters]);
 
   return (
     <div className="mx-auto bg-white p-4 shadow-inner border rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
@@ -91,6 +110,25 @@ export default function FindUsers() {
             className="input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Search by name"
           />
+              {filters.name && filteredCustomerSearch.length > 0 && (
+            <ul className="absolute z-10 bg-white border rounded-lg w-full mt-1 max-h-40 overflow-y-auto">
+              {filteredCustomerSearch.map((customer, index) => (
+                <li
+                  key={index}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    setFilters({
+                      ...filters,
+                      name: `${customer.firstName} ${customer.lastName}`,
+                    });
+                    setFilteredCustomerSearch([]);
+                  }}
+                >
+                  {customer.firstName} {customer.lastName}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div>
@@ -108,7 +146,7 @@ export default function FindUsers() {
           />
         </div>
 
-        <div>
+        {/* <div>
           <label className="label">
             <span className="label-text text-sm">Status</span>
           </label>
@@ -123,20 +161,40 @@ export default function FindUsers() {
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
           </select>
-        </div>
-
+        </div> */}
         <div>
           <label className="label">
             <span className="label-text text-sm">Zone</span>
           </label>
-          <input
-            type="text"
+          <select
             id="zone"
             name="zone"
             value={filters.zone}
             onChange={handleChange}
+            className="select select-bordered w-full"
+          >
+            <option value="">Select a Zone</option>
+            {zones &&
+              zones.map((zone) => (
+                <option key={zone._id} value={zone.name}>
+                  {zone.name}
+                </option>
+              ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="label">
+            <span className="label-text text-sm">Phone Number</span>
+          </label>
+          <input
+            type="text"
+            id="mobileNo"
+            name="mobileNo"
+            value={filters.mobileNo}
+            onChange={handleChange}
             className="input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Search by zone"
+            placeholder="Search by phone number"
           />
         </div>
       </div>
@@ -146,20 +204,22 @@ export default function FindUsers() {
         <table className="table table-zebra w-full">
           <thead>
             <tr>
-              <th className="p-2">NAME</th>
-              <th className="p-2">TITLE</th>
-              <th className="p-2">STATUS</th>
-              <th className="p-2">ROLE</th>
-              <th className="p-2">EMAIL</th>
+              <th className="p-2 uppercase">NAME</th>
+              <th className="p-2 uppercase">Setupbox No</th>
+              {/* <th className="p-2 uppercase">STATUS</th> */}
+              <th className="p-2 uppercase">Zone</th>
+              <th className="p-2 uppercase">Phone No</th>
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user, index) => (
+            {customers.length > 0 ? (
+              customers.map((user, index) => (
                 <tr key={index} className="hover">
-                  <td className="p-2">{user.name}</td>
-                  <td className="p-2">{user.title}</td>
                   <td className="p-2">
+                    {user.firstName + " " + user.lastName}
+                  </td>
+                  <td className="p-2">{user.setupBoxNo}</td>
+                  {/* <td className="p-2">
                     <span
                       className={`badge badge-outline ${
                         user.status === "Active"
@@ -167,11 +227,11 @@ export default function FindUsers() {
                           : "badge-error"
                       }`}
                     >
-                      {user.status}
+                      {user.isActive}
                     </span>
-                  </td>
-                  <td className="p-2">{user.role}</td>
-                  <td className="p-2">{user.email}</td>
+                  </td> */}
+                  <td className="p-2">{user.zone}</td>
+                  <td className="p-2">{user.mobileNo}</td>
                 </tr>
               ))
             ) : (
