@@ -1,46 +1,27 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { FaPlus } from "react-icons/fa";
+import Select from "react-select/base";
+import makeAnimated from "react-select/animated";
 
 const BillingsForm = () => {
+  const animatedComponents = makeAnimated();
   const [formData, setFormData] = useState({
-    customer: "",
-    setupBoxNo: "",
-    month: "",
-    amount: "",
-    mode: "",
+    customerName: "",
+    setupBoxNumber: "",
+    date: "",
+    amt: "",
+    deposit: "",
+    takenBy: "kaka",
   });
-  const [customers, setCustomers] = useState([]);
-  const dispatch = useDispatch();
+  const customers = useSelector((state) => state.customers.customers);
+  const customerNames = customers.map((customer) => ({
+    value: customer.firstName + " " + customer.lastName,
+    label: customer.firstName + " " + customer.lastName,
+  }));
 
-  // Fetch customers for the dropdown from the /api/billings/filter API
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_REACT_APP_API_URL}/billings/filter`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to fetch customers");
-        }
-        setCustomers(data); // Update state with fetched customers
-      } catch (error) {
-        console.error("Error fetching customers:", error);
-        toast.error("Failed to fetch customers");
-      }
-    };
-
-    fetchCustomers();
-  }, []);
-
+  console.log("CustomerNames", customerNames);
   // Handle form input changes
   const handleChange = (e) => {
     setFormData({
@@ -69,18 +50,18 @@ const BillingsForm = () => {
       }
       toast.success("Billing data added successfully!");
       setFormData({
-        customer: "",
-        setupBoxNo: "",
-        month: "",
-        amount: "",
-        mode: "",
+        customerName: "",
+        setupBoxNumber: "",
+        date: "",
+        amt: "",
+        deposit: "",
+        takenBy: "",
       });
     } catch (error) {
       console.error("Error adding billing data:", error);
       toast.error("Failed to add billing data");
     }
   };
-
   return (
     <div>
       <form
@@ -88,16 +69,26 @@ const BillingsForm = () => {
         onSubmit={handleSubmit}
       >
         <div className="w-full my-auto">
+          {/* <Select
+            closeMenuOnSelect={false}
+            components={animatedComponents}
+            defaultValue={[]}
+            options={customerNames}
+          /> */}
+
           <select
             className="input input-bordered p-2 w-full"
             onChange={handleChange}
-            name="customer"
-            value={formData.customer}
+            name="customerName"
+            value={formData.customerName}
           >
             <option value="">Select Customer</option>
             {customers.map((customer) => (
-              <option key={customer.id} value={customer.id}>
-                {customer.name}
+              <option
+                key={customer._id}
+                value={customer.firstName + " " + customer.lastName}
+              >
+                {customer.firstName + " " + customer.lastName}
               </option>
             ))}
           </select>
@@ -107,8 +98,8 @@ const BillingsForm = () => {
             type="text"
             className="input input-bordered w-full"
             placeholder="Enter setupbox number"
-            name="setupBoxNo"
-            value={formData.setupBoxNo}
+            name="setupBoxNumber"
+            value={formData.setupBoxNumber}
             onChange={handleChange}
           />
         </div>
@@ -116,9 +107,9 @@ const BillingsForm = () => {
           <input
             type="date"
             className="input input-bordered p-2 w-full"
-            placeholder="Select month"
-            name="month"
-            value={formData.month}
+            placeholder="Select date"
+            name="date"
+            value={formData.date}
             onChange={handleChange}
           />
         </div>
@@ -126,8 +117,8 @@ const BillingsForm = () => {
           <input
             type="number"
             className="input input-bordered p-2 w-full"
-            value={formData.amount}
-            name="amount"
+            value={formData.amt}
+            name="amt"
             placeholder="Amount"
             onChange={handleChange}
           />
@@ -135,13 +126,25 @@ const BillingsForm = () => {
         <div className="w-full my-auto">
           <select
             className="input input-bordered p-2 w-full"
-            name="mode"
-            value={formData.mode}
+            name="deposit"
+            value={formData.deposit}
             onChange={handleChange}
           >
             <option value="">Select Mode</option>
-            <option value="cash">CASH</option>
-            <option value="online">ONLINE</option>
+            <option value="CASH">CASH</option>
+            <option value="ONLINE">ONLINE</option>
+          </select>
+        </div>
+        <div className="w-full my-auto">
+          <select
+            className="input input-bordered p-2 w-full uppercase"
+            name="takenBy"
+            value={formData.takenBy}
+            onChange={handleChange}
+          >
+            <option value="kaka">Kaka</option>
+            <option value="madan">Madan</option>
+            <option value="robin">Robin</option>
           </select>
         </div>
         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
@@ -153,93 +156,3 @@ const BillingsForm = () => {
 };
 
 export default BillingsForm;
-
-
-// import { useState } from "react";
-// import { FaPlus } from "react-icons/fa";
-
-// const BillingsForm = () => {
-//   const [formData, setFormData] = useState({
-//     customer: "",
-//     setupBoxNo: "",
-//     month: "",
-//     amount: "",
-//     mode: "",
-//   });
-//   const handleChange = (e) => {
-//     setFormData({
-//       ...formData,
-//       [e.target.name]: e.target.value,
-//     });
-//   };
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log(formData);
-//   };
-//   return (
-//     <div>
-//       <form
-//         className="bg-base-200/60 p-2 flex items-center w-full border rounded-lg shadow-inner mb-3 gap-2"
-//         onSubmit={handleSubmit}
-//       >
-//         <div className="w-full my-auto">
-//           <select
-//             className="input  input-bordered p-2 w-full"
-//             onChange={handleChange}
-//             name="customer"
-//             value={formData.customer}
-//           >
-//             <option value="">Select Customer</option>
-//             {/* Add options dynamically */}
-//           </select>
-//         </div>
-//         <div className="w-full my-auto">
-//           <input
-//             type="text"
-//             className="input  input-bordered w-full"
-//             placeholder="Enter setupbox number"
-//             name="setupBoxNo"
-//             value={formData.setupBoxNo}
-//             onChange={handleChange}
-//           />
-//         </div>
-//         <div className="w-full my-auto">
-//           <input
-//             type="date"
-//             className="input  input-bordered  p-2 w-full"
-//             placeholder="Select month"
-//             name="month"
-//             value={formData.month}
-//             onChange={handleChange}
-//           />
-//         </div>
-//         <div className="w-full my-auto">
-//           <input
-//             type="number"
-//             className="input  input-bordered  p-2 w-full"
-//             value={formData.amount}
-//             name="amount"
-//             placeholder="Amount"
-//             onChange={handleChange}
-//           />
-//         </div>
-//         <div className="w-full my-auto">
-//           <select
-//             className="input  input-bordered  p-2 w-full"
-//             name="mode"
-//             value={formData.mode}
-//             onChange={handleChange}
-//           >
-//             <option value="cash">CASH</option>
-//             <option value="online">ONLINE</option>
-//           </select>
-//         </div>
-//         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-//           <FaPlus />
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default BillingsForm;

@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { CiMoneyCheck1 } from "react-icons/ci";
 import { GoHome } from "react-icons/go";
+import { RiTeamLine } from "react-icons/ri";
 import { TbUserSearch } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 
@@ -13,6 +14,7 @@ export default function Sidebar() {
       { name: "Home", href: "/", icon: <GoHome /> },
       { name: "Billings", href: "/billings", icon: <CiMoneyCheck1 /> },
       { name: "Find Customers", href: "/find_users", icon: <TbUserSearch /> },
+      { name: "Team", href: "/teams", icon: <RiTeamLine /> },
     ],
     []
   );

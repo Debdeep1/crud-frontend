@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { setUser } from "../redux/slices/userSlice";
 
 export default function AuthForm({ type }) {
   const [formData, setFormData] = useState({
@@ -10,6 +12,7 @@ export default function AuthForm({ type }) {
     confirmPassword: "",
   });
   const [errorMessage, setErrorMessage] = useState(null);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({
@@ -45,6 +48,7 @@ export default function AuthForm({ type }) {
       });
 
       const data = await response.json();
+      dispatch(setUser(data));
 
       if (!response.ok) {
         toast.error("Something went wrong");

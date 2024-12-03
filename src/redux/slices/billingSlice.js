@@ -1,18 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  billings: [],
+  filteredCustomer: [],
 };
 
 const billingsSlice = createSlice({
   name: "billings",
   initialState,
   reducers: {
-    addBilling: (state, action) => {
-      state.billings.push(action.payload);
+    setFilterCustomers: (state, action) => {
+      state.filteredCustomer = action.payload;
     },
   },
 });
 
-export const { addBilling } = billingsSlice.actions;
+export const { setFilterCustomers } = billingsSlice.actions;
 export default billingsSlice.reducer;

@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import customerReducer from "./slices/customerSlice";
 import zoneReducer from "./slices/zoneSlice";
 import planReducer from "./slices/planSlice";
+import userReducer from "./slices/userSlice";
 
 const persistConfig = {
   key: "root",
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   customers: customerReducer,
   zones: zoneReducer,
   plans: planReducer,
+  user: userReducer,
 });
 const persistedReducer = persistReducer(persistConfig, reducer);
 
