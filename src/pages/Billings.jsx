@@ -9,24 +9,27 @@ import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const Billings = () => {
-  // Example data for demonstration; you can replace this with dynamic data.
   const user = useSelector((state) => state.user.user);
   const role = user.role;
   const [filterCustomers, setFilterCustomers] = useState([]);
 
-  const fetchFilterCustomers = useCallback(async () => {
+  // Fetch filtered customers
+  const fetchFilterCustomers = useCallback(async (startDate, endDate) => {
     try {
-      const response = await fetchFilteredCustomers();
-      setFilterCustomers(response);
+      const response = await fetchFilteredCustomers(startDate, endDate);
+      const sortedData = response.sort((a, b) => new Date(a.date) - new Date(b.date));
+      setFilterCustomers(sortedData);
     } catch (error) {
       console.error("Error fetching filtered customers:", error);
     }
-  }, [filterCustomers]);
-
-  useEffect(() => {
-    fetchFilterCustomers();
   }, []);
 
+  // Fetch customers on initial render
+  useEffect(() => {
+    fetchFilterCustomers();
+  }, [fetchFilterCustomers]);
+
+  // Handle delete action
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
@@ -52,22 +55,36 @@ const Billings = () => {
       toast.error("Something went wrong");
     }
   };
+  // Handle new billing addition
+  const handleNewBilling = (newBilling) => {
+    setFilterCustomers((prev) => {
+      const updatedList = [...prev, newBilling];
+      return updatedList.sort((a, b) => new Date(a.date) - new Date(b.date));
+    });
+  };
   const billingData = filterCustomers;
 
   return (
     <Layout>
       <div className="mx-auto bg-white p-2 shadow-md border rounded-lg h-[calc(100vh-80px)] overflow-y-auto">
         <div className="mx-auto bg-white p-4 shadow-inner border rounded-lg h-[calc(100vh-100px)] overflow-y-auto">
-          <Heading title="Billings" isFilter={true} />
+          <Heading
+            title="Billings"
+            isFilter={true}
+            onFilterApply={(startDate, endDate) => {
+              fetchFilterCustomers(startDate, endDate);
+            }}
+          />
 
           {/* Total Amount */}
           <div className="text-2xl font-semibold my-2 text-center">
-            Total Amount: $0.00 {/* Update dynamically */}
+            Total Amount: Rs. {billingData.reduce((acc, item) => acc + (item.amt || 0), 0).toFixed(2)}
           </div>
 
           {/* Billing Form */}
-          <BillingsForm />
+          <BillingsForm onBillingAdded={handleNewBilling} />
 
+          {/* Billing Data Table */}
           <div className="bg-white p-2 shadow-inner rounded-lg">
             <table className="table table-zebra">
               <thead>
@@ -91,7 +108,10 @@ const Billings = () => {
                       <td className="p-2">Rs. {record.amt}</td>
                       {role === "admin" && (
                         <td className="p-1 text-center">
-                          <button className="btn btn-sm btn-error text-white" onClick={() => handleDelete(record._id)}>
+                          <button
+                            className="btn btn-sm btn-error text-white"
+                            onClick={() => handleDelete(record._id)}
+                          >
                             <FaTrash className="w-3 h-3" />
                           </button>
                         </td>
@@ -100,7 +120,7 @@ const Billings = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3" className="p-2 text-center">
+                    <td colSpan="5" className="p-2 text-center">
                       No data available
                     </td>
                   </tr>
