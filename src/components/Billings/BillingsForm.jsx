@@ -1,13 +1,14 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { FaPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { FaPlus } from "react-icons/fa";
 
 const BillingsForm = ({ onBillingAdded }) => {
   const getCurrentDate = () => {
     const today = new Date();
     return today.toISOString().split("T")[0]; // Format as YYYY-MM-DD
   };
+
   const [formData, setFormData] = useState({
     customerName: "",
     setupBoxNumber: "",
@@ -16,6 +17,7 @@ const BillingsForm = ({ onBillingAdded }) => {
     deposit: "",
     takenBy: "kaka",
   });
+
   const customers = useSelector((state) => state.customers.customers);
 
   const handleChange = (e) => {
@@ -61,13 +63,14 @@ const BillingsForm = ({ onBillingAdded }) => {
       toast.error("Failed to add billing data");
     }
   };
+
   return (
     <div>
       <form
-        className="bg-base-200/60 p-2 flex items-center w-full border rounded-lg shadow-inner mb-3 gap-2"
+        className="bg-base-200/60 p-4 flex flex-wrap items-center w-full border rounded-lg shadow-inner mb-3 gap-4"
         onSubmit={handleSubmit}
       >
-        <div className="w-full my-auto">
+        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
           <select
             className="input input-bordered p-2 w-full"
             onChange={handleChange}
@@ -85,7 +88,8 @@ const BillingsForm = ({ onBillingAdded }) => {
             ))}
           </select>
         </div>
-        <div className="w-full my-auto">
+
+        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
           <input
             type="text"
             className="input input-bordered w-full"
@@ -95,7 +99,8 @@ const BillingsForm = ({ onBillingAdded }) => {
             onChange={handleChange}
           />
         </div>
-        <div className="w-full my-auto">
+
+        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
           <input
             type="date"
             className="input input-bordered p-2 w-full"
@@ -105,7 +110,8 @@ const BillingsForm = ({ onBillingAdded }) => {
             onChange={handleChange}
           />
         </div>
-        <div className="w-full my-auto">
+
+        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
           <input
             type="number"
             className="input input-bordered p-2 w-full"
@@ -115,7 +121,8 @@ const BillingsForm = ({ onBillingAdded }) => {
             onChange={handleChange}
           />
         </div>
-        <div className="w-full my-auto">
+
+        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
           <select
             className="input input-bordered p-2 w-full"
             name="deposit"
@@ -127,7 +134,8 @@ const BillingsForm = ({ onBillingAdded }) => {
             <option value="ONLINE">ONLINE</option>
           </select>
         </div>
-        <div className="w-full my-auto">
+
+        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
           <select
             className="input input-bordered p-2 w-full uppercase"
             name="takenBy"
@@ -139,7 +147,11 @@ const BillingsForm = ({ onBillingAdded }) => {
             <option value="robin">Robin</option>
           </select>
         </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 rounded mt-4 sm:ml-2"
+        >
           <FaPlus />
         </button>
       </form>

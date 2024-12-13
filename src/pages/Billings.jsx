@@ -86,52 +86,55 @@ const Billings = () => {
 
           {/* Billing Data Table */}
           <div className="bg-white p-2 shadow-inner rounded-lg">
-            <table className="table table-zebra">
-              <thead>
-                <tr>
-                  <th className="p-2 uppercase">Customer</th>
-                  <th className="p-2 uppercase">Setupbox Number</th>
-                  <th className="p-2 uppercase">Month</th>
-                  <th className="p-2 uppercase">Amount</th>
-                  {role === "admin" && (
-                    <th className="p-2 uppercase text-center">Actions</th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {billingData.length > 0 ? (
-                  billingData.map((record, index) => (
-                    <tr key={index} className="border-b">
-                      <td className="p-2">{record.customerName}</td>
-                      <td className="p-2">{record.setupBoxNumber}</td>
-                      <td className="p-2">{formatDate(record.date)}</td>
-                      <td className="p-2">Rs. {record.amt}</td>
-                      {role === "admin" && (
-                        <td className="p-1 text-center">
-                          <button
-                            className="btn btn-sm btn-error text-white"
-                            onClick={() => handleDelete(record._id)}
-                          >
-                            <FaTrash className="w-3 h-3" />
-                          </button>
-                        </td>
-                      )}
-                    </tr>
-                  ))
-                ) : (
+            <div className="overflow-x-auto">
+              <table className="table table-zebra w-full">
+                <thead>
                   <tr>
-                    <td colSpan="5" className="p-2 text-center">
-                      No data available
-                    </td>
+                    <th className="p-2 uppercase">Customer</th>
+                    <th className="p-2 uppercase">Setupbox Number</th>
+                    <th className="p-2 uppercase">Month</th>
+                    <th className="p-2 uppercase">Amount</th>
+                    {role === "admin" && (
+                      <th className="p-2 uppercase text-center">Actions</th>
+                    )}
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {billingData.length > 0 ? (
+                    billingData.map((record, index) => (
+                      <tr key={index} className="border-b">
+                        <td className="p-2">{record.customerName}</td>
+                        <td className="p-2">{record.setupBoxNumber}</td>
+                        <td className="p-2">{formatDate(record.date)}</td>
+                        <td className="p-2">Rs. {record.amt}</td>
+                        {role === "admin" && (
+                          <td className="p-1 text-center">
+                            <button
+                              className="btn btn-sm btn-error text-white"
+                              onClick={() => handleDelete(record._id)}
+                            >
+                              <FaTrash className="w-3 h-3" />
+                            </button>
+                          </td>
+                        )}
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="p-2 text-center">
+                        No data available
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </Layout>
   );
 };
+
 
 export default Billings;
