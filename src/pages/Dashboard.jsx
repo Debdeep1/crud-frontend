@@ -55,22 +55,23 @@ const Dashboard = () => {
     getCustomers();
   }, []);
   return (
-    <Layout>
-      <div className="h-[calc(100vh-80px)] bg-white overflow-y-auto rounded-lg shadow-md border p-3">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          {navCards.map((card, index) => (
-            <NavCards
-              key={index}
-              link={card.link}
-              icon={card.icon}
-              title={card.title}
-              value={card.value}
-            />
-          ))}
+      <Layout>
+        <div className="h-[calc(100vh-80px)] bg-white overflow-y-auto rounded-lg shadow-md border p-3">
+          {/* Responsive grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
+            {navCards.map((card, index) => (
+              <NavCards
+                key={index}
+                link={card.link}
+                icon={card.icon}
+                title={card.title}
+                value={card.value}
+              />
+            ))}
+          </div>
+          <CustomerTable getCustomers={getCustomers} />
         </div>
-        <CustomerTable getCustomers={getCustomers} />
-      </div>
-    </Layout>
+      </Layout>    
   );
 };
 

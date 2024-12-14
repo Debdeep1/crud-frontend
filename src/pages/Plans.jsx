@@ -30,9 +30,10 @@ const Plans = () => {
       const response = await fetchPlans();
       dispatch(addPlans(response));
     } catch (error) {
-      console.error("Error fetching zones:", error);
+      console.error("Error fetching plans:", error);
     }
   };
+
   const handleDelete = async () => {
     try {
       const response = await fetch(
@@ -55,7 +56,7 @@ const Plans = () => {
       }
       setModal(false);
     } catch (error) {
-      console.error("Error deleting zone:", error);
+      console.error("Error deleting plan:", error);
     }
   };
 
@@ -69,61 +70,65 @@ const Plans = () => {
         <div className="bg-white p-4 shadow-inner rounded-lg h-[calc(100vh-100px)] border">
           <Heading title="Plans" isPlan={true} />
 
-          <table className="table">
-            <thead>
-              <tr>
-                <th></th>
-                <th className="p-2 uppercase">Plan Name</th>
-                <th className="p-2 uppercase">Amount</th>
-                <th className="p-2 uppercase">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {plans.map((plan, index) => (
-                <tr key={plan._id}>
-                  <td className="p-2">{index + 1}</td>
-                  <td className="p-2">{plan.name}</td>
-                  <td className="p-2">{plan.price}</td>
-                  <td className="p-2">
-                    <div
-                      className="dropdown"
-                      onClick={() => handleSetPlan(plan)}
-                    >
-                      <div
-                        tabIndex={0}
-                        role="button"
-                        className="btn btn-sm m-1"
-                      >
-                        <HiOutlineDotsVertical className="text-gray-500 cursor-pointer" />
-                      </div>
-                      <ul
-                        tabIndex={0}
-                        className="dropdown-content menu bg-base-100 rounded-box z-[1] w-44 p-2 shadow"
-                      >
-                        <li
-                          className="mb-1 hover:text-sky-700"
-                          onClick={() => navigate(`/plans/${plan._id}`)}
-                        >
-                          <Link>
-                            {" "}
-                            <FaEdit /> Edit
-                          </Link>
-                        </li>
-                        <li className="hover:text-rose-600" onClick={openModal}>
-                          <Link>
-                            {" "}
-                            <FaTrash /> Delete
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </td>
+          {/* Wrapper for the table with horizontal scrolling on small screens */}
+          <div className="overflow-x-auto sm:overflow-hidden">
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th className="p-2 uppercase">Plan Name</th>
+                  <th className="p-2 uppercase">Amount</th>
+                  <th className="p-2 uppercase">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {plans.map((plan, index) => (
+                  <tr key={plan._id}>
+                    <td className="p-2">{index + 1}</td>
+                    <td className="p-2">{plan.name}</td>
+                    <td className="p-2">{plan.price}</td>
+                    <td className="p-2">
+                      <div
+                        className="dropdown"
+                        onClick={() => handleSetPlan(plan)}
+                      >
+                        <div
+                          tabIndex={0}
+                          role="button"
+                          className="btn btn-sm m-1"
+                        >
+                          <HiOutlineDotsVertical className="text-gray-500 cursor-pointer" />
+                        </div>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content menu bg-base-100 rounded-box z-[1] w-44 p-2 shadow"
+                        >
+                          <li
+                            className="mb-1 hover:text-sky-700"
+                            onClick={() => navigate(`/plans/${plan._id}`)}
+                          >
+                            <Link>
+                              {" "}
+                              <FaEdit /> Edit
+                            </Link>
+                          </li>
+                          <li className="hover:text-rose-600" onClick={openModal}>
+                            <Link>
+                              {" "}
+                              <FaTrash /> Delete
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+
       {modal && (
         <Modal
           isOpen={modal}
@@ -134,7 +139,6 @@ const Plans = () => {
           onClick={handleDelete}
         />
       )}
-      s
     </Layout>
   );
 };

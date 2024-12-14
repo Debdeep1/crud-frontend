@@ -34,6 +34,7 @@ const Zone = () => {
       console.error("Error fetching zones:", error);
     }
   };
+
   const handleDelete = async () => {
     try {
       const response = await fetch(
@@ -59,6 +60,7 @@ const Zone = () => {
       console.error("Error deleting zone:", error);
     }
   };
+
   useEffect(() => {
     getZones();
   }, []);
@@ -68,67 +70,60 @@ const Zone = () => {
       <div className="bg-white p-2 shadow-md rounded-lg h-[calc(100vh-80px)] border">
         <div className="bg-white p-4 shadow-inner rounded-lg h-[calc(100vh-100px)] border">
           <Heading title="Zones" isZone={true} />
-          <table className="table">
-            <thead>
-              <tr>
-                <th className="p-2 uppercase">Zone Name</th>
-                <th className="p-2 uppercase">Zonal Number</th>
-                <th className="p-2 uppercase">Zonal Landmark</th>
-                <th className="p-2 uppercase">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {zones &&
-                zones.map((zone) => (
-                  <tr key={zone._id}>
-                    <td className="p-2">{zone.name}</td>
-                    <td className="p-2">
-                      {zone.zonalNumber ? zone.zonalNumber : "-"}
-                    </td>
-                    <td className="p-2">
-                      {zone.zonalLandmark ? zone.zonalLandmark : "-"}
-                    </td>
-                    <td className="p-2">
-                      <div
-                        className="dropdown"
-                        onClick={() => handleSetZone(zone)}
-                      >
+          <div className="overflow-x-auto">
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th className="p-2 uppercase text-left">Zone Name</th>
+                  <th className="p-2 uppercase text-left">Zonal Number</th>
+                  <th className="p-2 uppercase text-left">Zonal Landmark</th>
+                  <th className="p-2 uppercase text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {zones &&
+                  zones.map((zone) => (
+                    <tr key={zone._id}>
+                      <td className="p-2">{zone.name}</td>
+                      <td className="p-2">
+                        {zone.zonalNumber ? zone.zonalNumber : "-"}
+                      </td>
+                      <td className="p-2">
+                        {zone.zonalLandmark ? zone.zonalLandmark : "-"}
+                      </td>
+                      <td className="p-2">
                         <div
-                          tabIndex={0}
-                          role="button"
-                          className="btn btn-sm m-1"
+                          className="dropdown inline-block relative"
+                          onClick={() => handleSetZone(zone)}
                         >
-                          <HiOutlineDotsVertical className="text-gray-500 cursor-pointer" />
+                          <button className="btn btn-sm m-1">
+                            <HiOutlineDotsVertical className="text-gray-500 cursor-pointer" />
+                          </button>
+                          <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-44 p-2 shadow absolute right-0 mt-2">
+                            <li
+                              className="mb-1 hover:text-sky-700"
+                              onClick={() => navigate(`/zones/${zone._id}`)}
+                            >
+                              <Link>
+                                <FaEdit /> Edit
+                              </Link>
+                            </li>
+                            <li
+                              className="hover:text-rose-600"
+                              onClick={openModal}
+                            >
+                              <Link>
+                                <FaTrash /> Delete
+                              </Link>
+                            </li>
+                          </ul>
                         </div>
-                        <ul
-                          tabIndex={0}
-                          className="dropdown-content menu bg-base-100 rounded-box z-[1] w-44 p-2 shadow"
-                        >
-                          <li
-                            className="mb-1 hover:text-sky-700"
-                            onClick={() => navigate(`/zones/${zone._id}`)}
-                          >
-                            <Link>
-                              {" "}
-                              <FaEdit /> Edit
-                            </Link>
-                          </li>
-                          <li
-                            className="hover:text-rose-600"
-                            onClick={openModal}
-                          >
-                            <Link>
-                              {" "}
-                              <FaTrash /> Delete
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       {modal && (

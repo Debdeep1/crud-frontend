@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-
+//import Cookies from 'js-cookie'
 const SessionAuth = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
   const [sessionExpired, setSessionExpired] = useState(false);
+  //const accessToken = Cookies.get('accesstoken'); // Retrieve the cookie
 
   const fetchRefreshToken = async () => {
     try {
@@ -14,6 +15,9 @@ const SessionAuth = ({ children }) => {
         {
           method: "POST",
           credentials: "include",
+          headers: { 
+            'Content-Type': 'application/json' 
+          },
         }
       );
 
@@ -33,11 +37,15 @@ const SessionAuth = ({ children }) => {
   useEffect(() => {
     const validateToken = async () => {
       try {
+        
         const response = await fetch(
           `${import.meta.env.VITE_REACT_APP_API_URL}/auth/validate-token`,
           {
             method: "GET",
             credentials: "include", // Ensures cookies are sent
+            headers: { 
+              'Content-Type': 'application/json' 
+            },
           }
         );
         if (response.ok) {
