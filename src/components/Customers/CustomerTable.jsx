@@ -76,91 +76,78 @@ export default function CustomerTable({ getCustomers }) {
     }
   };
   return (
-    <div className="bg-white p-4 shadow-inner rounded-lg">
-      <table className="table w-full">
-        <thead>
-          <tr>
-            <th className="p-2">NAME</th>
-            <th className="p-2">SETUPBOX ID</th>
-            <th className="p-2">PHONE NUMBER</th>
-            {/* <th className="p-2">ACTIVE</th> */}
-            <th className="p-2">ZONE</th>
-            <th className="p-2">AMOUNT</th>
-            <th className="p-2 uppercase">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {customers.length > 0 &&
-            customers.map((customer, index) => (
-              <tr key={index} className="hover">
-                <td className="p-2">
-                  <p className="font-semibold">
-                    {customer.firstName} {customer.lastName}
-                  </p>
-                </td>
-                <td className="p-2">{customer.setupBoxNo}</td>
-                <td className="p-2">{customer.mobileNo}</td>
-                {/* <td className="p-2">
-                  <span
-                    className={`badge badge-outline ${
-                      customer.isActive ? "badge-success" : "badge-error"
-                    }`}
-                  >
-                    {customer.isActive ? "Active" : "Inactive"}
-                  </span>
-                </td> */}
-                <td className="p-2">{customer.zone}</td>
-                <td className="p-2">{customer.amt}</td>
-
-                <td className="p-2">
-                  <div
-                    className="dropdown"
-                    onClick={() => handleSetCustomer(customer)}
-                  >
-                    <div tabIndex={0} role="button" className="btn btn-sm m-1">
-                      <HiOutlineDotsVertical className="text-gray-500 cursor-pointer" />
-                    </div>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content menu bg-base-100 rounded-box z-[1] w-44 p-2 shadow"
-                    >
-                      <li
-                        className="mb-1 hover:text-sky-700"
-                        onClick={() => openCustomer(customer)}
-                      >
-                        <Link>
-                          {" "}
-                          <IoOpen className="w-5 h-5" />
-                          Open
-                        </Link>
-                      </li>
-                      <li
-                        className="hover:text-rose-600"
-                        onClick={() => setModal(true)}
-                      >
-                        <Link>
-                          {" "}
-                          <FaTrash /> Delete
-                        </Link>
-                      </li>
-                    </ul>
+    <div className="bg-white p-4 shadow-inner rounded-lg overflow-x-auto">
+    <table className="table w-full text-sm md:text-base">
+      <thead>
+        <tr>
+          <th className="p-2 text-left">NAME</th>
+          <th className="p-2 text-left hidden md:table-cell">SETUPBOX ID</th>
+          <th className="p-2 text-left hidden sm:table-cell">PHONE NUMBER</th>
+          <th className="p-2 text-left hidden lg:table-cell">ZONE</th>
+          <th className="p-2 text-left">AMOUNT</th>
+          <th className="p-2 text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {customers.length > 0 &&
+          customers.map((customer, index) => (
+            <tr key={index} className="hover">
+              <td className="p-2">
+                <p className="font-semibold">
+                  {customer.firstName} {customer.lastName}
+                </p>
+              </td>
+              <td className="p-2 hidden md:table-cell">{customer.setupBoxNo}</td>
+              <td className="p-2 hidden sm:table-cell">{customer.mobileNo}</td>
+              <td className="p-2 hidden lg:table-cell">{customer.zone}</td>
+              <td className="p-2">{customer.amt}</td>
+              <td className="p-2">
+                <div
+                  className="dropdown"
+                  onClick={() => handleSetCustomer(customer)}
+                >
+                  <div tabIndex={0} role="button" className="btn btn-sm m-1">
+                    <HiOutlineDotsVertical className="text-gray-500 cursor-pointer" />
                   </div>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-      {modal && (
-        <Modal
-          isOpen={modal}
-          onClose={() => setModal(false)}
-          title="Delete Customer"
-          desp="Are you sure you want to delete this customer?"
-          isDelete={true}
-          onClick={handleDelete}
-        />
-      )}
-    </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-44 p-2 shadow"
+                  >
+                    <li
+                      className="mb-1 hover:text-sky-700"
+                      onClick={() => openCustomer(customer)}
+                    >
+                      <Link>
+                        <IoOpen className="w-5 h-5" />
+                        Open
+                      </Link>
+                    </li>
+                    <li
+                      className="hover:text-rose-600"
+                      onClick={() => setModal(true)}
+                    >
+                      <Link>
+                        <FaTrash /> Delete
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
+    {modal && (
+      <Modal
+        isOpen={modal}
+        onClose={() => setModal(false)}
+        title="Delete Customer"
+        desp="Are you sure you want to delete this customer?"
+        isDelete={true}
+        onClick={handleDelete}
+      />
+    )}
+  </div>
   );
 }
 
