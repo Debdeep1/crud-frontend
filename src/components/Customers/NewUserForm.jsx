@@ -250,27 +250,6 @@ export default function NewCustomerForm({
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="landmark"
-          >
-            Landmark
-          </label>
-          <input
-            type="text"
-            id="landmark"
-            name="landmark"
-            value={formData.landmark}
-            onChange={handleChange}
-            className="input input-bordered w-full"
-            placeholder="Enter Landmark"
-            disabled={!isEditing}
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-3 gap-4">
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="city"
           >
             City
@@ -287,7 +266,9 @@ export default function NewCustomerForm({
             disabled={!isEditing}
           />
         </div>
+      </div>
 
+      <div className="grid grid-cols-3 gap-4">
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -328,6 +309,32 @@ export default function NewCustomerForm({
             {zones.map((zone) => (
               <option key={zone._id} value={zone.name}>
                 {zone.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="landmark"
+          >
+            Landmark
+          </label>
+
+          <select
+            id="landmark"
+            name="landmark"
+            value={formData.landmark}
+            onChange={handleChange}
+            className="select select-bordered w-full"
+            required
+            disabled={!isEditing}
+          >
+            <option value="">Select a Zone</option>
+            {zones.map((zone) => (
+              <option key={zone._id} value={zone.zonalLandmark}>
+                {zone.zonalLandmark}
               </option>
             ))}
           </select>

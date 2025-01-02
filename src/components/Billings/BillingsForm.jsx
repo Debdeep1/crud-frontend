@@ -17,14 +17,45 @@ const BillingsForm = ({ onBillingAdded }) => {
     deposit: "",
     takenBy: "kaka",
   });
+  const [filteredSetupBoxes, setFilteredSetupBoxes] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const customers = useSelector((state) => state.customers.customers);
+  console.log("Customers", customers)
 
+  const customerToSetupBox = Object.fromEntries(
+    customers.map((customer) => [
+      `${customer.firstName} ${customer.lastName}`,
+      customer.setupBoxNo,
+    ])
+  );
+
+  const setupBoxToCustomer = Object.fromEntries(
+    customers.map((customer) => [
+      customer.setupBoxNo,
+      `${customer.firstName} ${customer.lastName}`,
+    ])
+  );
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    let updatedData = { ...formData, [name]: value };
+
+    if (name === "customerName" && value in customerToSetupBox) {
+      updatedData.setupBoxNumber = customerToSetupBox[value];
+    } else if (name === "setupBoxNumber" && value in setupBoxToCustomer) {
+      updatedData.customerName = setupBoxToCustomer[value];
+    }
+    setFormData(updatedData);
+  };
+
+ const handleSetupBoxSelect = (setupBoxNumber, customerName) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      setupBoxNumber,
+      customerName,
     });
+    setShowDropdown(false);
   };
 
   const handleSubmit = async (e) => {
@@ -45,11 +76,9 @@ const BillingsForm = ({ onBillingAdded }) => {
         throw new Error(data.message || "Failed to add billing data");
       }
       toast.success("Billing data added successfully!");
-      // Call the onBillingAdded callback with the newly added data
       if (onBillingAdded) {
-        onBillingAdded(data); // Assuming `data` contains the newly created billing record
+        onBillingAdded(data); 
       }
-      // Reset the form after submission
       setFormData({
         customerName: "",
         setupBoxNumber: "",
@@ -89,15 +118,35 @@ const BillingsForm = ({ onBillingAdded }) => {
           </select>
         </div>
 
-        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
+        <div className="w-full sm:w-1/2 lg:w-1/4 my-2 relative">
           <input
             type="text"
             className="input input-bordered w-full"
-            placeholder="Enter setupbox number"
+            placeholder="Enter setup box number"
             name="setupBoxNumber"
             value={formData.setupBoxNumber}
             onChange={handleChange}
+            onFocus={() => setShowDropdown(filteredSetupBoxes.length > 0)}
+            onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
           />
+          {showDropdown && (
+            <ul className="absolute z-10 bg-white border rounded-md shadow w-full max-h-40 overflow-auto">
+              {filteredSetupBoxes.map((customer) => (
+                <li
+                  key={customer._id}
+                  className="p-2 hover:bg-gray-200 cursor-pointer"
+                  onClick={() =>
+                    handleSetupBoxSelect(
+                      customer.setupBoxNumber,
+                      `${customer.firstName} ${customer.lastName}`
+                    )
+                  }
+                >
+                  {customer.setupBoxNumber}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
