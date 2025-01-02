@@ -28,6 +28,7 @@ export default function NewCustomerForm({
   const zones = useSelector((state) => state.zones.zones);
   const plans = useSelector((state) => state.plans.plans);
   const customer = useSelector((state) => state.customers.customer);
+
   const [formData, setFormData] = useState({
     setupBoxNo: customer.setupBoxNo || "",
     firstName: customer.firstName || "",
@@ -39,12 +40,13 @@ export default function NewCustomerForm({
     landmark: customer.landmark || "",
     city: customer.city || "",
     pincode: customer.pincode || "",
-    zone: customer.zone || "",
+    zone: customer.zone.zonalLandmark || "",
     servicePlan: customer.servicePlan || "",
     amt: customer.amt || "",
     remarks: customer.remarks || "",
   });
 
+  console.log("formdata", formData);
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "servicePlan") {
@@ -268,7 +270,7 @@ export default function NewCustomerForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -294,7 +296,7 @@ export default function NewCustomerForm({
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="zone"
           >
-            Zone
+            Zone Landmark
           </label>
           <select
             id="zone"
@@ -307,13 +309,13 @@ export default function NewCustomerForm({
           >
             <option value="">Select a Zone</option>
             {zones.map((zone) => (
-              <option key={zone._id} value={zone.name}>
-                {zone.name}
+              <option key={zone._id} value={zone._id}>
+                {zone.zonalLandmark + " ** " + zone.zonalNumber}
               </option>
             ))}
           </select>
         </div>
-
+{/* 
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -328,7 +330,6 @@ export default function NewCustomerForm({
             value={formData.landmark}
             onChange={handleChange}
             className="select select-bordered w-full"
-            required
             disabled={!isEditing}
           >
             <option value="">Select a Zone</option>
@@ -338,7 +339,7 @@ export default function NewCustomerForm({
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="mb-4">

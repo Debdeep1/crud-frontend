@@ -20,6 +20,7 @@ export default function FindUsers() {
   const zones = useSelector((state) => state.zones.zones);
   const [filteredCustomerSearch, setFilteredCustomerSearch] = useState([]);
 
+  console.log("customers", customers);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -164,7 +165,7 @@ export default function FindUsers() {
         </div> */}
         <div>
           <label className="label">
-            <span className="label-text text-sm">Zone</span>
+            <span className="label-text text-sm">Zone Landmark</span>
           </label>
           <select
             id="zone"
@@ -176,8 +177,8 @@ export default function FindUsers() {
             <option value="">Select a Zone</option>
             {zones &&
               zones.map((zone) => (
-                <option key={zone._id} value={zone.name}>
-                  {zone.name}
+                <option key={zone._id} value={zone._id}>
+                  {zone.zonalLandmark + " ** " + zone.zonalNumber}
                 </option>
               ))}
           </select>
@@ -207,7 +208,7 @@ export default function FindUsers() {
               <th className="p-2 uppercase">NAME</th>
               <th className="p-2 uppercase">Setupbox No</th>
               {/* <th className="p-2 uppercase">STATUS</th> */}
-              <th className="p-2 uppercase">Zone</th>
+              <th className="p-2 uppercase">Zone Landmark</th>
               <th className="p-2 uppercase">Phone No</th>
             </tr>
           </thead>
@@ -230,7 +231,7 @@ export default function FindUsers() {
                       {user.isActive}
                     </span>
                   </td> */}
-                  <td className="p-2">{user.zone}</td>
+                  <td className="p-2">{user.zone.zonalLandmark + " ** " + user.zone.zonalNumber}</td>
                   <td className="p-2">{user.mobileNo}</td>
                 </tr>
               ))
