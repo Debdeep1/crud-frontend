@@ -76,7 +76,7 @@ export default function CustomerTable({ getCustomers }) {
     }
   };
   return (
-    <div className="bg-white p-4 shadow-inner rounded-lg overflow-x-auto">
+    <div className="bg-white p-4 shadow-inner rounded-lg overflow-y-auto h-[calc(100vh-220px)]">
     <table className="table w-full text-sm md:text-base">
       <thead>
         <tr>
@@ -100,12 +100,12 @@ export default function CustomerTable({ getCustomers }) {
               </td>
               <td className="p-2 hidden md:table-cell">{customer.setupBoxNo}</td>
               <td className="p-2 hidden sm:table-cell">{customer.mobileNo}</td>
-              <td className="p-2 hidden sm:table-cell">{customer.zonalLandmark}</td>
+              <td className="p-2 hidden sm:table-cell">{customer.landmark}</td>
               <td className="p-2 hidden lg:table-cell">{customer.zone}</td>
               <td className="p-2">{customer.amt}</td>
               <td className="p-2">
                 <div
-                  className="dropdown"
+                  className="dropdown dropdown-end"
                   onClick={() => handleSetCustomer(customer)}
                 >
                   <div tabIndex={0} role="button" className="btn btn-sm m-1">
@@ -113,7 +113,7 @@ export default function CustomerTable({ getCustomers }) {
                   </div>
                   <ul
                     tabIndex={0}
-                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-44 p-2 shadow"
+                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-32 p-2 shadow"
                   >
                     <li
                       className="mb-1 hover:text-sky-700"
