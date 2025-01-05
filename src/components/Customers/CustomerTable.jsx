@@ -82,10 +82,10 @@ export default function CustomerTable({ getCustomers }) {
       <thead>
         <tr>
           <th className="p-2 text-left">NAME</th>
-          <th className="p-2 text-left hidden md:table-cell">SETUPBOX ID</th>
+          <th className="p-2 text-left hidden md:table-cell">STB</th>
           <th className="p-2 text-left hidden sm:table-cell">PHONE NUMBER</th>
-          {/* <th className="p-2 text-left hidden lg:table-cell">ZONE</th> */}
-          <th className="p-2 text-left hidden lg:table-cell">ZONAL LANDMARK</th>
+          <th className="p-2 text-left hidden lg:table-cell">LANDMARK</th>
+          <th className="p-2 text-left hidden lg:table-cell">ZONE</th>
           <th className="p-2 text-left">AMOUNT</th>
           <th className="p-2 text-left">Actions</th>
         </tr>
@@ -101,8 +101,8 @@ export default function CustomerTable({ getCustomers }) {
               </td>
               <td className="p-2 hidden md:table-cell">{customer.setupBoxNo}</td>
               <td className="p-2 hidden sm:table-cell">{customer.mobileNo}</td>
-              {/* <td className="p-2 hidden sm:table-cell">{customer.zone.name}</td> */}
               <td className="p-2 hidden lg:table-cell" >{customer.zone.zonalLandmark + " ** " + customer.zone.zonalNumber}</td>
+              <td className="p-2 hidden sm:table-cell">{customer.zone.name}</td>
               <td className="p-2">{customer.amt}</td>
               <td className="p-2">
                 <div

@@ -21,7 +21,6 @@ const BillingsForm = ({ onBillingAdded }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const customers = useSelector((state) => state.customers.customers);
-  console.log("Customers", customers)
 
   const customerToSetupBox = Object.fromEntries(
     customers.map((customer) => [
@@ -49,7 +48,7 @@ const BillingsForm = ({ onBillingAdded }) => {
     setFormData(updatedData);
   };
 
- const handleSetupBoxSelect = (setupBoxNumber, customerName) => {
+  const handleSetupBoxSelect = (setupBoxNumber, customerName) => {
     setFormData({
       ...formData,
       setupBoxNumber,
@@ -58,8 +57,22 @@ const BillingsForm = ({ onBillingAdded }) => {
     setShowDropdown(false);
   };
 
+  console.log("formData", formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const selectedCustomer = customers.find(
+      (customer) =>
+        `${customer.firstName} ${customer.lastName}` === formData.customerName &&
+        customer.setupBoxNo === formData.setupBoxNumber
+    );
+    if (!selectedCustomer) {
+      toast.error("Selected customer not found!");
+      return;
+    }
+    const billingData = {
+      ...formData,
+      customerId: selectedCustomer._id,
+    };
     try {
       const response = await fetch(
         `${import.meta.env.VITE_REACT_APP_API_URL}/billings/add`,
@@ -68,7 +81,7 @@ const BillingsForm = ({ onBillingAdded }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(billingData),
         }
       );
       const data = await response.json();
@@ -77,7 +90,7 @@ const BillingsForm = ({ onBillingAdded }) => {
       }
       toast.success("Billing data added successfully!");
       if (onBillingAdded) {
-        onBillingAdded(data); 
+        onBillingAdded(data);
       }
       setFormData({
         customerName: "",
@@ -96,113 +109,117 @@ const BillingsForm = ({ onBillingAdded }) => {
   return (
     <div>
       <form
-        className="bg-base-200/60 p-4 flex flex-wrap items-center w-full border rounded-lg shadow-inner mb-3 gap-4"
+        className="bg-base-200/60 p-4 border rounded-lg shadow-inner mb-3"
         onSubmit={handleSubmit}
       >
-        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
-          <select
-            className="input input-bordered p-2 w-full"
-            onChange={handleChange}
-            name="customerName"
-            value={formData.customerName}
-          >
-            <option value="">Select Customer</option>
-            {customers.map((customer) => (
-              <option
-                key={customer._id}
-                value={customer.firstName + " " + customer.lastName}
-              >
-                {customer.firstName + " " + customer.lastName}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="w-full sm:w-1/2 lg:w-1/4 my-2 relative">
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="Enter setup box number"
-            name="setupBoxNumber"
-            value={formData.setupBoxNumber}
-            onChange={handleChange}
-            onFocus={() => setShowDropdown(filteredSetupBoxes.length > 0)}
-            onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
-          />
-          {showDropdown && (
-            <ul className="absolute z-10 bg-white border rounded-md shadow w-full max-h-40 overflow-auto">
-              {filteredSetupBoxes.map((customer) => (
-                <li
+        <div className=" grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+          <div className="my-2">
+            <select
+              className="input input-bordered p-2 w-full"
+              onChange={handleChange}
+              name="customerName"
+              value={formData.customerName}
+            >
+              <option value="">Select Customer</option>
+              {customers.map((customer) => (
+                <option
                   key={customer._id}
-                  className="p-2 hover:bg-gray-200 cursor-pointer"
-                  onClick={() =>
-                    handleSetupBoxSelect(
-                      customer.setupBoxNumber,
-                      `${customer.firstName} ${customer.lastName}`
-                    )
-                  }
+                  value={customer.firstName + " " + customer.lastName}
                 >
-                  {customer.setupBoxNumber}
-                </li>
+                  {customer.firstName + " " + customer.lastName}
+                </option>
               ))}
-            </ul>
-          )}
+            </select>
+          </div>
+
+          <div className="my-2 relative">
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              placeholder="Enter setup box number"
+              name="setupBoxNumber"
+              value={formData.setupBoxNumber}
+              onChange={handleChange}
+              onFocus={() => setShowDropdown(filteredSetupBoxes.length > 0)}
+              onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+            />
+            {showDropdown && (
+              <ul className="absolute z-10 bg-white border rounded-md shadow w-full max-h-40 overflow-auto">
+                {filteredSetupBoxes.map((customer) => (
+                  <li
+                    key={customer._id}
+                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                    onClick={() =>
+                      handleSetupBoxSelect(
+                        customer.setupBoxNumber,
+                        `${customer.firstName} ${customer.lastName}`
+                      )
+                    }
+                  >
+                    {customer.setupBoxNumber}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="my-2">
+            <input
+              type="date"
+              className="input input-bordered p-2 w-full"
+              placeholder="Select date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="my-2">
+            <input
+              type="number"
+              className="input input-bordered p-2 w-full"
+              value={formData.amt}
+              name="amt"
+              placeholder="Amount"
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="my-2">
+            <select
+              className="input input-bordered p-2 w-full"
+              name="deposit"
+              value={formData.deposit}
+              onChange={handleChange}
+            >
+              <option value="">Select Mode</option>
+              <option value="CASH">CASH</option>
+              <option value="ONLINE">ONLINE</option>
+            </select>
+          </div>
+
+          <div className="my-2">
+            <select
+              className="input input-bordered p-2 w-full uppercase"
+              name="takenBy"
+              value={formData.takenBy}
+              onChange={handleChange}
+            >
+              <option value="kaka">Kaka</option>
+              <option value="madan">Madan</option>
+              <option value="robin">Robin</option>
+            </select>
+          </div>
         </div>
 
-        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
-          <input
-            type="date"
-            className="input input-bordered p-2 w-full"
-            placeholder="Select date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
-          <input
-            type="number"
-            className="input input-bordered p-2 w-full"
-            value={formData.amt}
-            name="amt"
-            placeholder="Amount"
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
-          <select
-            className="input input-bordered p-2 w-full"
-            name="deposit"
-            value={formData.deposit}
-            onChange={handleChange}
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white p-2 rounded mt-4"
           >
-            <option value="">Select Mode</option>
-            <option value="CASH">CASH</option>
-            <option value="ONLINE">ONLINE</option>
-          </select>
+            <FaPlus />
+          </button>
         </div>
-
-        <div className="w-full sm:w-1/2 lg:w-1/4 my-2">
-          <select
-            className="input input-bordered p-2 w-full uppercase"
-            name="takenBy"
-            value={formData.takenBy}
-            onChange={handleChange}
-          >
-            <option value="kaka">Kaka</option>
-            <option value="madan">Madan</option>
-            <option value="robin">Robin</option>
-          </select>
-        </div>
-
-        <button
-          type="submit"
-          className="bg-blue-500 text-white p-2 rounded mt-4 sm:ml-2"
-        >
-          <FaPlus />
-        </button>
       </form>
     </div>
   );

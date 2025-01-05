@@ -40,7 +40,7 @@ export default function NewCustomerForm({
     landmark: customer.landmark || "",
     city: customer.city || "",
     pincode: customer.pincode || "",
-    zone: customer.zone.zonalLandmark || "",
+    zone: customer.zone || "",
     servicePlan: customer.servicePlan || "",
     amt: customer.amt || "",
     remarks: customer.remarks || "",
@@ -296,7 +296,7 @@ export default function NewCustomerForm({
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="zone"
           >
-            Zone Landmark
+            Landmark
           </label>
           <select
             id="zone"

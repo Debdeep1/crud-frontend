@@ -14,9 +14,9 @@ const Billings = () => {
   const [filterCustomers, setFilterCustomers] = useState([]);
 
   // Fetch filtered customers
-  const fetchFilterCustomers = useCallback(async (startDate, endDate) => {
+  const fetchFilterCustomers = useCallback(async (startDate, endDate, customerField) => {
     try {
-      const response = await fetchFilteredCustomers(startDate, endDate);
+      const response = await fetchFilteredCustomers(startDate, endDate, customerField);
       const sortedData = response.sort((a, b) => new Date(a.date) - new Date(b.date));
       setFilterCustomers(sortedData);
     } catch (error) {
@@ -64,6 +64,8 @@ const Billings = () => {
   };
   const billingData = filterCustomers;
 
+  console.log("Billing data", billingData);
+
   return (
     <Layout>
       <div className="mx-auto bg-white p-2 shadow-md border rounded-lg h-[calc(100vh-80px)] overflow-y-auto">
@@ -71,8 +73,8 @@ const Billings = () => {
           <Heading
             title="Billings"
             isFilter={true}
-            onFilterApply={(startDate, endDate) => {
-              fetchFilterCustomers(startDate, endDate);
+            onFilterApply={(startDate, endDate, customerField) => {
+              fetchFilterCustomers(startDate, endDate, customerField);
             }}
           />
 
@@ -91,7 +93,7 @@ const Billings = () => {
                 <thead>
                   <tr>
                     <th className="p-2 uppercase">Customer</th>
-                    <th className="p-2 uppercase">Setupbox Number</th>
+                    <th className="p-2 uppercase">STB</th>
                     <th className="p-2 uppercase">Month</th>
                     <th className="p-2 uppercase">Amount</th>
                     {role === "admin" && (
@@ -103,7 +105,7 @@ const Billings = () => {
                   {billingData.length > 0 ? (
                     billingData.map((record, index) => (
                       <tr key={index} className="border-b">
-                        <td className="p-2">{record.customerName}</td>
+                        <td className="p-2">{record.customer?.firstName + " " + record.customer?.lastName}</td>
                         <td className="p-2">{record.setupBoxNumber}</td>
                         <td className="p-2">{formatDate(record.date)}</td>
                         <td className="p-2">Rs. {record.amt}</td>

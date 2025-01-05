@@ -134,7 +134,7 @@ export default function FindUsers() {
 
         <div>
           <label className="label">
-            <span className="label-text text-sm">Setupbox No</span>
+            <span className="label-text text-sm">STB</span>
           </label>
           <input
             type="text"
@@ -165,7 +165,7 @@ export default function FindUsers() {
         </div> */}
         <div>
           <label className="label">
-            <span className="label-text text-sm">Zone Landmark</span>
+            <span className="label-text text-sm">Landmark</span>
           </label>
           <select
             id="zone"
@@ -208,7 +208,8 @@ export default function FindUsers() {
               <th className="p-2 uppercase">NAME</th>
               <th className="p-2 uppercase">Setupbox No</th>
               {/* <th className="p-2 uppercase">STATUS</th> */}
-              <th className="p-2 uppercase">Zone Landmark</th>
+              <th className="p-2 uppercase">Landmark</th>
+              <th className="p-2 uppercase">Zone</th>
               <th className="p-2 uppercase">Phone No</th>
             </tr>
           </thead>
@@ -232,6 +233,7 @@ export default function FindUsers() {
                     </span>
                   </td> */}
                   <td className="p-2">{user.zone.zonalLandmark + " ** " + user.zone.zonalNumber}</td>
+                  <td className="p-2">{user.zone.name}</td>
                   <td className="p-2">{user.mobileNo}</td>
                 </tr>
               ))

@@ -17,12 +17,14 @@ export const fetchCustomers = async () => {
   }
 };
 
-export const fetchFilteredCustomers = async (startDate, endDate) => {
+export const fetchFilteredCustomers = async (startDate, endDate, customerField) => {
   try {
     // Construct the query parameters
     const params = new URLSearchParams();
     if (startDate) params.append("startDate", startDate);
     if (endDate) params.append("endDate", endDate);
+    if (customerField) params.append("customerId", customerField);
+
     const response = await fetch(
       `${import.meta.env.VITE_REACT_APP_API_URL}/billings/filter?${params.toString()}`,
       {
@@ -32,11 +34,14 @@ export const fetchFilteredCustomers = async (startDate, endDate) => {
         },
       }
     );
+
     const data = await response.json();
-    console.log('----',data)
+    console.log("----", data);
+
     if (!response.ok) {
       throw new Error(data.message || "Failed to fetch filtered customers");
     }
+
     return data;
   } catch (error) {
     console.error("Error fetching filtered customers:", error);

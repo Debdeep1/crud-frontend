@@ -4,7 +4,7 @@ import { IoChevronBackSharp } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setZone } from "../../redux/slices/zoneSlice";
 import { setCustomer } from "../../redux/slices/customerSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPlan } from "../../redux/slices/planSlice";
 import { useEffect, useState } from "react";
 
@@ -42,10 +42,12 @@ const Heading = ({
   // State for date inputs
   const [startDate, setStartDate] = useState(firstDayOfMonth);
   const [endDate, setEndDate] = useState(lastDayOfMonth);
+  const [customerField, setCustomerField] = useState("");
+  const customers = useSelector((state) => state.customers.customers);
   
   const handleFilterApply = () => {
     if (onFilterApply) {
-      onFilterApply(startDate, endDate);
+      onFilterApply(startDate, endDate, customerField);
     }
   };
 
@@ -86,6 +88,25 @@ const Heading = ({
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
+          <div className="my-2">
+            <select
+              className="input input-bordered p-2 w-full"
+              onChange={(e) => setCustomerField(e.target.value)}
+              name="customerId"
+              value={customerField}
+            >
+              <option value="">Select Customer</option>
+              {customers.map((customer) => (
+                <option
+                  key={customer._id}
+                  value={customer._id}
+                >
+                  {customer.firstName + " " + customer.lastName}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <button
             className="btn btn-primary w-full sm:w-auto"
             onClick={handleFilterApply}
