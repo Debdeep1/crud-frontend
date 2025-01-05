@@ -208,6 +208,10 @@ const BillingsForm = ({ onBillingAdded }) => {
               <option value="kaka">Kaka</option>
               <option value="madan">Madan</option>
               <option value="robin">Robin</option>
+              <option value="gopal">Gopal</option>
+              <option value="office_1">Office 1</option>
+              <option value="office_2">Office 2</option>
+              <option value="others">Others</option>
             </select>
           </div>
         </div>
