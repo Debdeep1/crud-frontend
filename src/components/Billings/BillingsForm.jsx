@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -244,4 +245,7 @@ const BillingsForm = ({ onBillingAdded }) => {
   );
 };
 
+BillingsForm.propTypes = {
+  onBillingAdded: PropTypes.func.isRequired,
+}
 export default BillingsForm;
