@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Modal from "../components/common/Modal";
 import { toast } from "react-toastify";
-import { fetchZones } from "../apis/Zones";
+import { fetchZones } from "../apis/zones";
 
 const Zone = () => {
   const [modal, setModal] = useState(false);

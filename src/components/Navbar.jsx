@@ -1,6 +1,6 @@
 import { FaUser } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
-import { logout } from "../apis/Auth";
+import { logout } from "../apis/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 

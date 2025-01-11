@@ -3,32 +3,48 @@ import Layout from "../components/Layout";
 import BillingsForm from "../components/Billings/BillingsForm";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { fetchFilteredCustomers } from "../apis/Customer";
+import { fetchFilteredCustomers } from "../apis/customer";
 import { formatDate } from "../utlis";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Modal from "../components/common/Modal";
 
 const Billings = () => {
   const user = useSelector((state) => state.user.user);
   const role = user.role;
   const [filterCustomers, setFilterCustomers] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [customerId, setCustomerId] = useState("");
 
   // Fetch filtered customers
-  const fetchFilterCustomers = useCallback(async (startDate, endDate, customerField) => {
-    try {
-      const response = await fetchFilteredCustomers(startDate, endDate, customerField);
-      const sortedData = response.sort((a, b) => new Date(a.date) - new Date(b.date));
-      setFilterCustomers(sortedData);
-    } catch (error) {
-      console.error("Error fetching filtered customers:", error);
-    }
-  }, []);
+  const fetchFilterCustomers = useCallback(
+    async (startDate, endDate, customerField) => {
+      try {
+        const response = await fetchFilteredCustomers(
+          startDate,
+          endDate,
+          customerField
+        );
+        const sortedData = response.sort(
+          (a, b) => new Date(a.date) - new Date(b.date)
+        );
+        setFilterCustomers(sortedData);
+      } catch (error) {
+        console.error("Error fetching filtered customers:", error);
+      }
+    },
+    []
+  );
 
   // Fetch customers on initial render
   useEffect(() => {
     fetchFilterCustomers();
   }, [fetchFilterCustomers]);
 
+  const setDeleteModal = (id) => {
+    setModal(true);
+    setCustomerId(id);
+  };
   // Handle delete action
   const handleDelete = async (id) => {
     try {
@@ -80,7 +96,10 @@ const Billings = () => {
 
           {/* Total Amount */}
           <div className="text-2xl font-semibold my-2 text-center">
-            Total Amount: Rs. {billingData.reduce((acc, item) => acc + (item.amt || 0), 0).toFixed(2)}
+            Total Amount: Rs.{" "}
+            {billingData
+              .reduce((acc, item) => acc + (item.amt || 0), 0)
+              .toFixed(2)}
           </div>
 
           {/* Billing Form */}
@@ -105,7 +124,11 @@ const Billings = () => {
                   {billingData.length > 0 ? (
                     billingData.map((record, index) => (
                       <tr key={index} className="border-b">
-                        <td className="p-2">{record.customer?.firstName + " " + record.customer?.lastName}</td>
+                        <td className="p-2">
+                          {record.customer?.firstName +
+                            " " +
+                            record.customer?.lastName}
+                        </td>
                         <td className="p-2">{record.setupBoxNumber}</td>
                         <td className="p-2">{formatDate(record.date)}</td>
                         <td className="p-2">Rs. {record.amt}</td>
@@ -113,7 +136,7 @@ const Billings = () => {
                           <td className="p-1 text-center">
                             <button
                               className="btn btn-sm btn-error text-white"
-                              onClick={() => handleDelete(record._id)}
+                              onClick={() => setDeleteModal(record._id)}
                             >
                               <FaTrash className="w-3 h-3" />
                             </button>
@@ -134,9 +157,18 @@ const Billings = () => {
           </div>
         </div>
       </div>
+      {modal && (
+        <Modal
+          isOpen={modal}
+          onClose={() => setModal(false)}
+          title="Delete Billing"
+          desp="Are you sure you want to delete this billing?"
+          isDelete={true}
+          onClick={() => handleDelete(customerId)}
+        />
+      )}
     </Layout>
   );
 };
-
 
 export default Billings;

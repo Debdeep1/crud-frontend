@@ -3,9 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addCustomers } from "../../redux/slices/customerSlice";
 import Heading from "../common/Heading";
-import { fetchZones } from "../../apis/Zones";
+import { fetchZones } from "../../apis/zones";
 import { addZones } from "../../redux/slices/zoneSlice";
-import { fetchCustomers } from "../../apis/Customer";
+import { fetchCustomers } from "../../apis/customer";
+import { Link } from "react-router-dom";
+import { FaTrash } from "react-icons/fa";
+import { IoOpen } from "react-icons/io5";
+import { HiOutlineDotsVertical } from "react-icons/hi";
+import CustomerActions from "../CustomerActions";
 
 export default function FindUsers() {
   const [filters, setFilters] = useState({
@@ -29,11 +34,13 @@ export default function FindUsers() {
 
     // Perform client-side filtering for name search
     if (name === "name" && value.trim() !== "") {
-      const results = customers && customers.filter((customer) =>
-        `${customer.firstName} ${customer.lastName}`
-          .toLowerCase()
-          .includes(value.toLowerCase())
-      );
+      const results =
+        customers &&
+        customers.filter((customer) =>
+          `${customer.firstName} ${customer.lastName}`
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       setFilteredCustomerSearch(results);
     } else {
       setFilteredCustomerSearch([]);
@@ -111,7 +118,7 @@ export default function FindUsers() {
             className="input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Search by name"
           />
-              {filters.name && filteredCustomerSearch.length > 0 && (
+          {filters.name && filteredCustomerSearch.length > 0 && (
             <ul className="absolute z-10 bg-white border rounded-lg w-full mt-1 max-h-40 overflow-y-auto">
               {filteredCustomerSearch.map((customer, index) => (
                 <li
@@ -211,6 +218,7 @@ export default function FindUsers() {
               <th className="p-2 uppercase">Landmark</th>
               <th className="p-2 uppercase">Zone</th>
               <th className="p-2 uppercase">Phone No</th>
+              <th className="p-2 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -232,9 +240,14 @@ export default function FindUsers() {
                       {user.isActive}
                     </span>
                   </td> */}
-                  <td className="p-2">{user.zone.zonalLandmark + " ** " + user.zone.zonalNumber}</td>
+                  <td className="p-2">
+                    {user.zone.zonalLandmark + " ** " + user.zone.zonalNumber}
+                  </td>
                   <td className="p-2">{user.zone.name}</td>
                   <td className="p-2">{user.mobileNo}</td>
+                  <td className="p-2">
+                    <CustomerActions getCustomers={getCustomers}  customer={user}/>
+                  </td>
                 </tr>
               ))
             ) : (
