@@ -7,6 +7,7 @@ import { setCustomer } from "../../redux/slices/customerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setPlan } from "../../redux/slices/planSlice";
 import { useEffect, useState } from "react";
+import SearchDropdown from "../common/SearchDropdown";
 
 const Heading = ({
   title,
@@ -18,36 +19,49 @@ const Heading = ({
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  
+
   const handleBack = () => {
     navigate(-1);
     dispatch(setCustomer({}));
     dispatch(setZone({}));
     dispatch(setPlan({}));
   };
-  
+
   // Get the first and last day of the current month by default
   const currentDate = new Date();
   const firstDayOfMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth(),
     1
-  ).toISOString().split("T")[0];
+  )
+    .toISOString()
+    .split("T")[0];
   const lastDayOfMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
     0
-  ).toISOString().split("T")[0];
-  
+  )
+    .toISOString()
+    .split("T")[0];
+
   // State for date inputs
   const [startDate, setStartDate] = useState(firstDayOfMonth);
   const [endDate, setEndDate] = useState(lastDayOfMonth);
-  const [customerField, setCustomerField] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
   const customers = useSelector((state) => state.customers.customers);
-  
+
   const handleFilterApply = () => {
     if (onFilterApply) {
-      onFilterApply(startDate, endDate, customerField);
+      const selectedCustomer = customers.find(
+        (customer) =>
+          `${customer.firstName} ${customer.lastName}` === searchTerm
+      );
+      onFilterApply(
+        startDate,
+        endDate,
+        selectedCustomer ? selectedCustomer._id : ""
+      );
     }
   };
 
@@ -59,7 +73,29 @@ const Heading = ({
       dispatch(setPlan({}));
     }
   }, [location.pathname, dispatch]);
-  
+
+  useEffect(() => {
+    setFilteredCustomers(customers);
+  }, [customers]);
+
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+
+    // Filter customers based on the search term
+    const filtered = customers.filter((customer) =>
+      `${customer.firstName} ${customer.lastName}`
+        .toLowerCase()
+        .includes(term.toLowerCase())
+    );
+    setFilteredCustomers(filtered);
+  };
+
+  const handleCustomerSelect = (customer) => {
+    setSearchTerm(`${customer.firstName} ${customer.lastName}`);
+    setFilteredCustomers([]);
+  };
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-4 sm:gap-6 md:gap-8">
       <div className="flex items-center gap-2 w-full sm:w-auto mb-6">
@@ -88,23 +124,14 @@ const Heading = ({
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
-          <div className="my-2">
-            <select
-              className="input input-bordered p-2 w-full"
-              onChange={(e) => setCustomerField(e.target.value)}
-              name="customerId"
-              value={customerField}
-            >
-              <option value="">Select Customer</option>
-              {customers.map((customer) => (
-                <option
-                  key={customer._id}
-                  value={customer._id}
-                >
-                  {customer.firstName + " " + customer.lastName}
-                </option>
-              ))}
-            </select>
+          <div>
+            <SearchDropdown
+              placeholder="Select a customer"
+              value={searchTerm}
+              handleChange={handleSearchChange}
+              options={filteredCustomers}
+              onSelect={handleCustomerSelect}
+            />
           </div>
 
           <button

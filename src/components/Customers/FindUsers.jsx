@@ -6,11 +6,8 @@ import Heading from "../common/Heading";
 import { fetchZones } from "../../apis/zones";
 import { addZones } from "../../redux/slices/zoneSlice";
 import { fetchCustomers } from "../../apis/customer";
-import { Link } from "react-router-dom";
-import { FaTrash } from "react-icons/fa";
-import { IoOpen } from "react-icons/io5";
-import { HiOutlineDotsVertical } from "react-icons/hi";
 import CustomerActions from "../CustomerActions";
+import SearchDropdown from "../common/SearchDropdown";
 
 export default function FindUsers() {
   const [filters, setFilters] = useState({
@@ -24,8 +21,6 @@ export default function FindUsers() {
   const customers = useSelector((state) => state.customers.customers);
   const zones = useSelector((state) => state.zones.zones);
   const [filteredCustomerSearch, setFilteredCustomerSearch] = useState([]);
-
-  console.log("customers", customers);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -105,39 +100,20 @@ export default function FindUsers() {
 
       {/* Filter Form */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div>
-          <label className="label">
-            <span className="label-text text-sm">Name</span>
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={filters.name}
-            onChange={handleChange}
-            className="input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Search by name"
-          />
-          {filters.name && filteredCustomerSearch.length > 0 && (
-            <ul className="absolute z-10 bg-white border rounded-lg w-full mt-1 max-h-40 overflow-y-auto">
-              {filteredCustomerSearch.map((customer, index) => (
-                <li
-                  key={index}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    setFilters({
-                      ...filters,
-                      name: `${customer.firstName} ${customer.lastName}`,
-                    });
-                    setFilteredCustomerSearch([]);
-                  }}
-                >
-                  {customer.firstName} {customer.lastName}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <SearchDropdown
+          label="name"
+          placeholder="Search by name"
+          value={filters.name}
+          options={filteredCustomerSearch}
+          handleChange={handleChange}
+          onSelect={(option) => {
+            setFilters({
+              ...filters,
+              name: `${option.firstName} ${option.lastName}`,
+            });
+            setFilteredCustomerSearch([]);
+          }}
+        />
 
         <div>
           <label className="label">
@@ -246,7 +222,10 @@ export default function FindUsers() {
                   <td className="p-2">{user.zone.name}</td>
                   <td className="p-2">{user.mobileNo}</td>
                   <td className="p-2">
-                    <CustomerActions getCustomers={getCustomers}  customer={user}/>
+                    <CustomerActions
+                      getCustomers={getCustomers}
+                      customer={user}
+                    />
                   </td>
                 </tr>
               ))
