@@ -184,7 +184,7 @@ export default function FindUsers() {
       </div>
 
       {/* Filtered Users Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto h-[calc(100vh-300px)]">
         <table className="table table-zebra w-full">
           <thead>
             <tr>
