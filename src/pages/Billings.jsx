@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import BillingsForm from "../components/Billings/BillingsForm";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { fetchFilteredCustomers } from "../apis/Customer";
+import { fetchFilteredCustomers } from "../apis/customer";
 import { formatDate } from "../utlis";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
