@@ -9,7 +9,7 @@ import { FaDollarSign, FaMapMarkedAlt, FaUsers } from "react-icons/fa";
 import { RiUserSearchFill } from "react-icons/ri";
 import Layout from "../components/Layout";
 import CustomerTable from "../components/Customers/CustomerTable";
-import { fetchCustomers } from "../apis/Customer";
+import { fetchCustomers } from "../apis/customer";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
