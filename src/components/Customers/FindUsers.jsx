@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addCustomers } from "../../redux/slices/customerSlice";
 import Heading from "../common/Heading";
-import { fetchZones } from "../../apis/Zones";
+import { fetchZones } from "../../apis/zones";
 import { addZones } from "../../redux/slices/zoneSlice";
 import { fetchCustomers } from "../../apis/customer";
 import CustomerActions from "../CustomerActions";
