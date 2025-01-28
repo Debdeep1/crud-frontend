@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "../components/common/Modal";
 import { addPlans, setPlan } from "../redux/slices/planSlice";
 import { toast } from "react-toastify";
-import { fetchPlans } from "../apis/Plans";
+import { fetchPlans } from "../apis/plans";
 
 const Plans = () => {
   const [modal, setModal] = useState(false);
