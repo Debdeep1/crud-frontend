@@ -11,6 +11,7 @@ import Plans from "./pages/Plans";
 import Billings from "./pages/Billings";
 import Zoneform from "./components/Zones/Zoneform";
 import Planform from "./components/Plans/Planform";
+import Teams from "./pages/Teams";
 
 function App() {
   return (
@@ -50,7 +51,7 @@ function App() {
             </SessionAuth>
           }
         />
-           <Route
+        <Route
           path="/billings"
           element={
             <SessionAuth>
@@ -66,7 +67,7 @@ function App() {
             </SessionAuth>
           }
         />
-         <Route
+        <Route
           path="/zones"
           element={
             <SessionAuth>
@@ -74,7 +75,7 @@ function App() {
             </SessionAuth>
           }
         />
-             <Route
+        <Route
           path="/zones/:id"
           element={
             <SessionAuth>
@@ -98,7 +99,7 @@ function App() {
             </SessionAuth>
           }
         />
-            <Route
+        <Route
           path="/plans/:id"
           element={
             <SessionAuth>
@@ -106,11 +107,19 @@ function App() {
             </SessionAuth>
           }
         />
-          <Route
+        <Route
           path="/new_plan"
           element={
             <SessionAuth>
               <Planform />
+            </SessionAuth>
+          }
+        />
+        <Route
+          path="/teams"
+          element={
+            <SessionAuth>
+              <Teams />
             </SessionAuth>
           }
         />

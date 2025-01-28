@@ -8,6 +8,8 @@ import { formatDate } from "../utlis";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Modal from "../components/common/Modal";
+import Drawer from "../components/common/Drawer";
+import { fetchBillingObjectApi } from "../apis/billing";
 
 const Billings = () => {
   const user = useSelector((state) => state.user.user);
@@ -15,6 +17,8 @@ const Billings = () => {
   const [filterCustomers, setFilterCustomers] = useState([]);
   const [modal, setModal] = useState(false);
   const [customerId, setCustomerId] = useState("");
+  const [showDrawer, setShowDrawer] = useState(false);
+  const [billingObject, setBillingObject] = useState({});
 
   // Fetch filtered customers
   const fetchFilterCustomers = useCallback(
@@ -79,8 +83,18 @@ const Billings = () => {
     });
   };
   const billingData = filterCustomers;
+  console.log("billing data", billingData);
 
-  console.log("Billing data", billingData);
+  // Fetch billing object
+  const fetchBillingObject = async (id) => {
+    try {
+      const response = await fetchBillingObjectApi(id);
+      console.log("Billing object", response);
+      setBillingObject(response);
+    } catch (error) {
+      console.error("Error fetching billing object:", error);
+    }
+  };
 
   return (
     <Layout>
@@ -98,8 +112,10 @@ const Billings = () => {
           <div className="text-2xl font-semibold my-2 text-center">
             Total Amount: Rs.{" "}
             {billingData
-              .reduce((acc, item) => acc + (item.amt || 0), 0)
-              .toFixed(2)}
+              ? billingData
+                  .reduce((acc, item) => acc + (item.amt || 0), 0)
+                  .toFixed(2)
+              : "0.00"}
           </div>
 
           {/* Billing Form */}
@@ -124,7 +140,13 @@ const Billings = () => {
                   {billingData.length > 0 ? (
                     billingData.map((record, index) => (
                       <tr key={index} className="border-b">
-                        <td className="p-2">
+                        <td
+                          className="p-2 hover:underline cursor-pointer"
+                          onClick={() => {
+                            fetchBillingObject(record._id);
+                            setShowDrawer(true);
+                          }}
+                        >
                           {record.customer?.firstName +
                             " " +
                             record.customer?.lastName}
@@ -164,7 +186,18 @@ const Billings = () => {
           title="Delete Billing"
           desp="Are you sure you want to delete this billing?"
           isDelete={true}
-          onClick={() => handleDelete(customerId)}
+          onClick={() => {
+            handleDelete(customerId);
+            setModal(false);
+          }}
+        />
+      )}
+
+      {showDrawer && (
+        <Drawer
+          open={showDrawer}
+          onClose={() => setShowDrawer(false)}
+          details={billingObject}
         />
       )}
     </Layout>

@@ -4,6 +4,7 @@ import { GoHome } from "react-icons/go";
 import { TbUserSearch } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 import { HiMenuAlt3, HiOutlineX } from "react-icons/hi";
+import { LiaUsersCogSolid } from "react-icons/lia";
 
 export default function Sidebar() {
   const location = useLocation();
@@ -14,6 +15,7 @@ export default function Sidebar() {
       { name: "Home", href: "/", icon: <GoHome /> },
       { name: "Billings", href: "/billings", icon: <CiMoneyCheck1 /> },
       { name: "Find Customers", href: "/find_users", icon: <TbUserSearch /> },
+      { name: "Teams", href: "/teams", icon: <LiaUsersCogSolid /> },
     ],
     []
   );

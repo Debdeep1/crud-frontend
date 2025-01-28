@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { addBillingApi } from "../../apis/billing";
 
 const BillingsForm = ({ onBillingAdded }) => {
   const getCurrentDate = () => {
@@ -17,6 +18,7 @@ const BillingsForm = ({ onBillingAdded }) => {
     amt: "",
     deposit: "",
     takenBy: "kaka",
+    note: "",
   });
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [filteredSetupBoxes, setFilteredSetupBoxes] = useState([]);
@@ -74,7 +76,8 @@ const BillingsForm = ({ onBillingAdded }) => {
 
     const selectedCustomer = customers.find(
       (customer) =>
-        `${customer.firstName} ${customer.lastName}` === formData.customerName &&
+        `${customer.firstName} ${customer.lastName}` ===
+          formData.customerName &&
         customer.setupBoxNo === formData.setupBoxNumber
     );
 
@@ -89,6 +92,12 @@ const BillingsForm = ({ onBillingAdded }) => {
     };
 
     try {
+      // const res = await addBillingApi(billingData);
+      // if (!res) {
+      //   toast.error("Something went wrong");
+      //   return;
+      // }
+      // const { data } = res;
       const response = await fetch(
         `${import.meta.env.VITE_REACT_APP_API_URL}/billings/add`,
         {
@@ -102,7 +111,6 @@ const BillingsForm = ({ onBillingAdded }) => {
       if (!response.ok) {
         throw new Error(data.message || "Failed to add billing data");
       }
-
       toast.success("Billing data added successfully!");
 
       if (onBillingAdded) {
@@ -116,9 +124,10 @@ const BillingsForm = ({ onBillingAdded }) => {
         amt: "",
         deposit: "",
         takenBy: "kaka",
+        note: "",
       });
     } catch (error) {
-      toast.error("Failed to add billing data");
+      console.error("Error", error);
     }
   };
 
@@ -138,8 +147,12 @@ const BillingsForm = ({ onBillingAdded }) => {
               name="customerName"
               value={formData.customerName}
               onChange={handleChange}
-              onFocus={() => setShowCustomerDropdown(filteredCustomers.length > 0)}
-              onBlur={() => setTimeout(() => setShowCustomerDropdown(false), 200)}
+              onFocus={() =>
+                setShowCustomerDropdown(filteredCustomers.length > 0)
+              }
+              onBlur={() =>
+                setTimeout(() => setShowCustomerDropdown(false), 200)
+              }
             />
             {showCustomerDropdown && (
               <ul className="absolute z-10 bg-white border rounded-md shadow w-full max-h-40 overflow-auto">
@@ -165,8 +178,12 @@ const BillingsForm = ({ onBillingAdded }) => {
               name="setupBoxNumber"
               value={formData.setupBoxNumber}
               onChange={handleChange}
-              onFocus={() => setShowSetupBoxDropdown(filteredSetupBoxes.length > 0)}
-              onBlur={() => setTimeout(() => setShowSetupBoxDropdown(false), 200)}
+              onFocus={() =>
+                setShowSetupBoxDropdown(filteredSetupBoxes.length > 0)
+              }
+              onBlur={() =>
+                setTimeout(() => setShowSetupBoxDropdown(false), 200)
+              }
             />
             {showSetupBoxDropdown && (
               <ul className="absolute z-10 bg-white border rounded-md shadow w-full max-h-40 overflow-auto">
@@ -231,6 +248,15 @@ const BillingsForm = ({ onBillingAdded }) => {
               <option value="others">Others</option>
             </select>
           </div>
+          <div className="my-2">
+            <textarea
+              className="input input-bordered p-2.5 w-full"
+              placeholder="Enter a note"
+              name="note"
+              value={formData.note}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         <div className="flex justify-end">
           <button
@@ -247,5 +273,5 @@ const BillingsForm = ({ onBillingAdded }) => {
 
 BillingsForm.propTypes = {
   onBillingAdded: PropTypes.func.isRequired,
-}
+};
 export default BillingsForm;
