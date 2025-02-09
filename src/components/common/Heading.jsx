@@ -29,24 +29,15 @@ const Heading = ({
 
   // Get the first and last day of the current month by default
   const currentDate = new Date();
-  const firstDayOfMonth = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    1
-  )
-    .toISOString()
-    .split("T")[0];
-  const lastDayOfMonth = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth() + 1,
-    0
-  )
-    .toISOString()
-    .split("T")[0];
+  const date = new Date();
+  date.setDate(currentDate.getDate() - 90); // Subtract 90 days
+
+  const formattedStartDate = date.toISOString().split("T")[0];
+  const formattedEndDate = currentDate.toISOString().split("T")[0];
 
   // State for date inputs
-  const [startDate, setStartDate] = useState(firstDayOfMonth);
-  const [endDate, setEndDate] = useState(lastDayOfMonth);
+  const [startDate, setStartDate] = useState(formattedStartDate);
+  const [endDate, setEndDate] = useState(formattedEndDate);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const customers = useSelector((state) => state.customers.customers);

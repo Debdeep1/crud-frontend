@@ -108,14 +108,20 @@ const Billings = () => {
             }}
           />
 
-          {/* Total Amount */}
-          <div className="text-2xl font-semibold my-2 text-center">
-            Total Amount: Rs.{" "}
-            {billingData
-              ? billingData
-                  .reduce((acc, item) => acc + (item.amt || 0), 0)
-                  .toFixed(2)
-              : "0.00"}
+          <div className="flex gap-4 items-center justify-center">
+            <div className="text-xl font-semibold my-2 text-center">
+              Total Amount: Rs.{" "}
+              {billingData
+                ? billingData
+                    .reduce((acc, item) => acc + (item.amt || 0), 0)
+                    .toFixed(2)
+                : "0.00"}
+            </div>
+            <span>|</span>
+            <div className="text-xl font-semibold my-2 text-center">
+              Total Customers:
+              {filterCustomers.length}
+            </div>
           </div>
 
           {/* Billing Form */}
